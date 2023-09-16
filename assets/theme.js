@@ -3626,8 +3626,8 @@ var ProductList = class extends HTMLElement {
         }
       });
     });
-    console.log(this);
-    observer.observe(this.querySelector('product-list'), { attributes: true, subtree: false, childList: true });
+    
+    observer.observe(document.querySelector('product-list'), { attributes: true, subtree: false, childList: true });
     // mik added custom javascript for smooth animation when new childnodes are added to reveal-items elements
 
   }

@@ -353,7 +353,7 @@
               </product-list>
 
               {% if section.settings.autoload_enabled %}
-                <div id="load-more-{{ section.id }}">
+                <div id="load-more-{{ section.id }}" class="collection__load-more">
                   {%- render 'button', type: 'button', content: 'Load more' -%}
                 </div>
                 {% comment %} mik  added auto load script {% endcomment %}

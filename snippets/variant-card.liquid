@@ -92,7 +92,7 @@
 
       {%- if show_quick_buy and variant.available -%}
         {%- if true -%}
-          {%- form 'product', variant, is: 'product-form' -%}
+          {%- form 'product', product, is: 'product-form' -%}
             <input type="hidden" name="id" value="{{ variant.id }}">
             <button type="submit" class="product-card__quick-add-button">
               <span class="sr-only">{{ 'product.general.add_to_cart_button' | t }}</span>

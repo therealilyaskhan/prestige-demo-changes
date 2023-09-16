@@ -1,1 +1,382 @@
-{"sections":{"main":{"type":"main-product","blocks":{"vendor":{"type":"vendor","disabled":true,"settings":{}},"title":{"type":"title","settings":{"heading_tag":"h3"}},"price":{"type":"price","settings":{"show_taxes_notice":false}},"payment_terms":{"type":"payment_terms","settings":{}},"separator":{"type":"separator","settings":{}},"65c78523-5930-41c2-b20d-4534b295d84f":{"type":"shopify:\/\/apps\/fit-quiz-for-clothes-and-shoes\/blocks\/fitquiz-block\/b10c5f36-d033-4d47-9f46-97864f785a5a","settings":{}},"description":{"type":"description","disabled":true,"settings":{"collapse_content":false,"show_below_gallery":false}},"variant_picker":{"type":"variant_picker","settings":{"hide_sold_out_variants":false,"selector_type":"block","color_selector_type":"color","size_chart_page":""}},"a065e071-7feb-48c6-b74f-ee9848c8ece0":{"type":"inventory_status","settings":{"inventory_threshold":13,"indicator_size":13,"text_in_stock":"Verfügbar","text_low_stock":"Wenige verfügbar","text_no_stock":"Ausverkauft","text_size":12,"margin_top":7.5,"margin_bottom":7.5}},"quantity_selector":{"type":"quantity_selector","settings":{}},"buy_buttons":{"type":"buy_buttons","settings":{"show_payment_button":true,"hide_branded_buy_buttons":true,"show_gift_card_recipient":false,"atc_button_background":"","atc_button_text_color":"","payment_button_background":"","payment_button_text_color":""}},"0d990288-e1bd-4a51-a718-9f44d94d4b94":{"type":"shopify:\/\/apps\/trust-badges-bear\/blocks\/widget\/163a9b59-0ec2-4cb7-bf5c-31408b4a9420","settings":{}},"048e4631-a890-47d6-b484-6b9903c94b25":{"type":"iwt","settings":{"alignment_on_mobile":"flex-start","icon":"truck","icon_size":30,"text":"Kostenloser Versand ab 150€","text_color":"#444444","text_size":14,"margin_top":-25,"margin_bottom":2.5}},"653933da-3ce1-4f12-8d8f-8fff7ec9751b":{"type":"klarna_placement","settings":{"icon_size":28,"text":"Bezahle in 30 Tagen mit Klarna.","text_color":"#444444","link_text":"Mehr erfahren","link_text_color":"#0070ba","text_size":14,"margin_top":3,"margin_bottom":7.5,"text_after_price":"in 30 Tagen bezahlen","text_under_price":"Erhalte mehr Zeit zum Bezahlen.","bullet_text_1":"Lege deine(n) Artikel in den Warenkorb","bullet_text_2":"Gehe zur Kasse und bezahle mit","bullet_text_3":"Jetzt shoppen und in bis zu 30 Tagen bezahlen","bullet_text_4":"Benutze die Klarna-App oder melde dich auf klarna.de an, um deine Zahlung zu tätigen."}},"25a1e6fe-861f-4e09-ae48-8fbe0449b2b7":{"type":"paypal_placement","settings":{"icon_size":19,"text":"Bezahle nach 30 Tagen.","text_color":"#444444","link_text":"Mehr erfahren","link_text_color":"#0070ba","text_size":14,"margin_top":0,"margin_bottom":0}},"f42d1416-d63c-4dc7-9a66-5e357231c72d":{"type":"iwt","settings":{"alignment_on_mobile":"flex-start","icon":"returns","icon_size":26,"text":"Kostenlose Retoure","text_color":"#444444","text_size":14,"margin_top":7.5,"margin_bottom":7.5}},"c8939192-65a3-45bb-9a70-1d73baa46e6d":{"type":"iwt","settings":{"alignment_on_mobile":"flex-start","icon":"checkmark","icon_size":25,"text":"14 Tage Rückgaberecht","text_color":"#444444","text_size":14,"margin_top":7.5,"margin_bottom":7.5}},"edb117f4-1108-4403-9d53-bcba2fd45fe7":{"type":"shopify:\/\/apps\/growave-loyalty-wishlist\/blocks\/block.product.faveButton\/b3d2efbe-110a-4e27-84a8-1f2ed63996a4","settings":{"textColor":"","backgroundColor":"","iconColor":"","boxShadow":"","hoverTextColor":"","hoverBackgroundColor":"","hoverBorderColor":"","hoverBoxShadow":"","margin":"","padding":"","buttonWidth":"","buttonHeight":"","mobileBreakpoint":"","mobileButtonWidth":"","fontSize":"","fontWeight":"","fontFamily":"","letterSpacing":"","textTransform":"","border":"","borderRadius":"","favedIconCode":"","favedIconSize":"","unFavedIconCode":"","unFavedIconSize":""}},"complementary_products":{"type":"complementary_products","settings":{"title":"Pairs well with","products_count":2,"show_below_gallery":true,"stack_products":false,"show_quick_buy":true}},"8cb7f1df-1d40-4dca-800d-dcd367d4ab0c":{"type":"accordion","settings":{"show_below_gallery":true,"icon":"picto-info","title":"Details","content":"<p>{{ product.metafields.custom.tab_2_inhalt | metafield_tag }}<\/p>","page":""}},"d232bc4f-86c2-41fd-b3ec-e1f76bdc4a99":{"type":"accordion","settings":{"show_below_gallery":true,"icon":"picto-bag-handle","title":"Beschreibung{{ product.metafields.custom.tab_1_title.value }}","content":"<p>{{ product.metafields.custom.tab_1_inhalt | metafield_tag }}<\/p>","page":""}},"8a4e5ede-8f6b-411f-b7ae-37fce767f93b":{"type":"accordion","settings":{"show_below_gallery":true,"icon":"picto-box","title":"Versand","content":"<p><strong>Kostenloser & schneller Versand<\/strong><\/p><p>Ab einem Bestellwert von 150€ ist der Versand kostenlos.<\/p><p>Wir versenden Deine Bestellung innerhalb von 1 bis 3 Werktagen nach Bestelleingang.<\/p><p>Sobald wir Deine Bestellung verschickt haben, erhältst Du von uns eine Versandbestätigung per E-Mail.<\/p>","page":""}},"3ebb957b-813a-4741-8e71-8473b3d250e6":{"type":"accordion","disabled":true,"settings":{"show_below_gallery":true,"icon":"picto-return","title":"Rückerstattung","content":"<p>Share some content to your customers about your products.<\/p>","page":""}},"5eca4b6f-578b-4b52-958e-6c8dc2a78350":{"type":"iwt","disabled":true,"settings":{"alignment_on_mobile":"flex-start","icon":"paypal","icon_size":19,"text":"Bezahle nach 30 Tagen","text_color":"#444444","text_size":16,"margin_top":7.5,"margin_bottom":7.5}},"da08db23-3f3b-4f41-a08d-6a5ad013661d":{"type":"accordion","disabled":true,"settings":{"show_below_gallery":true,"icon":"none","title":"Title","content":"<p>Share some content to your customers about your products.<\/p>","page":""}},"00a97a2d-1975-4dcc-bf86-c1f112ddeffc":{"type":"accordion","settings":{"show_below_gallery":true,"icon":"picto-customer-support","title":"FAQ","content":"<p><strong>Welche Größe brauche ich?<\/strong><\/p><p>Unsere Produkte<br\/>fallen etwas größer aus. Daher empfehlen wir dir eine Größe kleiner. Am besten nimmst<br\/>du unser „Fit-Quiz“ als Hilfe - damit findest du deine passende Größe.<\/p><p><strong>Wie gebe ich Produkte zurück?<\/strong><\/p><p>Du hast bei uns bestellt, aber dir gefällt das Produkt nicht<br\/>oder du hast einfach die falsche Größe für dich gewählt? <\/p><p>Kein Problem!<\/p><p>Über den folgenden Link gelangst du zu unserem Retourenportal,<br\/>in dem du <strong>mit deiner Bestellnummer und deiner E-Mail<\/strong> deine<br\/>Rücksendung oder deinen Umtausch online abwickeln kannst. <a href=\"https:\/\/spoiltsociety.com\/apps\/returns\">Zum Retourenportal <\/a><\/p><p><\/p>","page":""}}},"block_order":["vendor","title","price","payment_terms","separator","65c78523-5930-41c2-b20d-4534b295d84f","description","variant_picker","a065e071-7feb-48c6-b74f-ee9848c8ece0","quantity_selector","buy_buttons","0d990288-e1bd-4a51-a718-9f44d94d4b94","048e4631-a890-47d6-b484-6b9903c94b25","653933da-3ce1-4f12-8d8f-8fff7ec9751b","25a1e6fe-861f-4e09-ae48-8fbe0449b2b7","f42d1416-d63c-4dc7-9a66-5e357231c72d","c8939192-65a3-45bb-9a70-1d73baa46e6d","edb117f4-1108-4403-9d53-bcba2fd45fe7","complementary_products","8cb7f1df-1d40-4dca-800d-dcd367d4ab0c","d232bc4f-86c2-41fd-b3ec-e1f76bdc4a99","8a4e5ede-8f6b-411f-b7ae-37fce767f93b","3ebb957b-813a-4741-8e71-8473b3d250e6","5eca4b6f-578b-4b52-958e-6c8dc2a78350","da08db23-3f3b-4f41-a08d-6a5ad013661d","00a97a2d-1975-4dcc-bf86-c1f112ddeffc"],"settings":{"container_size":"lg","product_info_size":30,"show_sticky_add_to_cart":true,"center_basic_info":true,"desktop_media_layout":"grid","desktop_media_grid_gap":20,"mobile_controls":"thumbnails","enable_media_autoplay":true,"enable_video_looping":true,"enable_image_zoom":true,"max_image_zoom_level":3}},"698733d5-a0dd-4ab7-a4d3-3e667232ae84":{"type":"video","disabled":true,"blocks":{"template--17937087037708__698733d5-a0dd-4ab7-a4d3-3e667232ae84-1683134246a450ba85-0":{"type":"play","settings":{"icon_color":"#ffffff"}},"template--17937087037708__698733d5-a0dd-4ab7-a4d3-3e667232ae84-1683134246a450ba85-1":{"type":"heading","disabled":true,"settings":{"text":"Video","heading_tag":"h2"}}},"block_order":["template--17937087037708__698733d5-a0dd-4ab7-a4d3-3e667232ae84-1683134246a450ba85-0","template--17937087037708__698733d5-a0dd-4ab7-a4d3-3e667232ae84-1683134246a450ba85-1"],"settings":{"autoplay":false,"show_controls":true,"video_size":"md","video":"shopify:\/\/files\/videos\/Banner LQ 9mb.mp4","external_video_url":"https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc","poster":"shopify:\/\/shop_images\/MG_1214.jpg","text_color":"#ffffff"}},"7a71d9d6-83c3-4606-ae7c-2d155465f254":{"type":"text-with-icons","blocks":{"template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-0":{"type":"item","settings":{"icon":"picto-gift","icon_width":24,"mobile_icon_width":24,"title":"Belohnungen","content":"<p>Bei jedem Kauf sammelst Du Punkte in deinem Konto!<\/p>"}},"template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-1":{"type":"item","settings":{"icon":"picto-customer-support","icon_width":24,"mobile_icon_width":24,"title":"Service","content":"<p>Wir sind durchgängig für dich erreichbar!<\/p>"}},"template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-2":{"type":"item","settings":{"icon":"picto-shield","icon_width":24,"mobile_icon_width":24,"title":"Sichere Bezahlmethoden","content":"<p>Deine Zahlungsdaten werden sicher verarbeitet!<\/p>"}}},"block_order":["template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-0","template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-1","template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-2"],"settings":{"separate_section_with_border":true,"stack_on_mobile":false,"icon_color":"","text_color":"","text_alignment":"center"}},"related-products":{"type":"related-products","settings":{"separate_section_with_border":false,"hide_product_information":false,"stack_products":false,"recommendations_count":10,"products_per_row_mobile":"2","products_per_row_desktop":4,"horizontal_spacing_factor":0.2,"vertical_spacing_factor":0.2,"subheading":"Das wird dir auch gefallen","title":"","content":""}},"3b662f61-c12a-40bb-9f58-3ce1ebb54771":{"type":"multiple-media-with-text","blocks":{"template--17937087037708__3b662f61-c12a-40bb-9f58-3ce1ebb54771-16832840289e699358-0":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Naehen.jpg","rotation":0}}},"block_order":["template--17937087037708__3b662f61-c12a-40bb-9f58-3ce1ebb54771-16832840289e699358-0"],"settings":{"reveal_on_scroll":true,"separate_section_with_border":true,"media_position_desktop":"before_text","media_position_mobile":"before_text","media_layout":"overlap","media_alignment":"center","media_alignment_offset":0,"media_mobile_alignment_offset":0,"text_alignment":"center","subheading":"Produktion","title":"Handmade in der Türkei","content":"<p>Unsere Produkte werden unter fairen Arbeitsbedingungen in der Türkei hergestellt.<\/p>","button_1_text":"","button_1_link":"","button_1_style":"solid","button_2_text":"","button_2_link":"","button_2_style":"solid","background":"","text_color":"","button_background":"","button_text_color":""}},"65d5394b-714b-495b-a7ab-617877747ec5":{"type":"multiple-media-with-text","blocks":{"template--17937087037708__65d5394b-714b-495b-a7ab-617877747ec5-16832840289e699358-0":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Fabrik.jpg","rotation":0}}},"block_order":["template--17937087037708__65d5394b-714b-495b-a7ab-617877747ec5-16832840289e699358-0"],"settings":{"reveal_on_scroll":true,"separate_section_with_border":true,"media_position_desktop":"before_text","media_position_mobile":"before_text","media_layout":"overlap","media_alignment":"center","media_alignment_offset":0,"media_mobile_alignment_offset":0,"text_alignment":"center","subheading":"Qualitätsstandard","title":"Hochwertige Materialien","content":"<p>Wir verwenden nur die hochwertigsten Baumwollfasern für den Webprozess. Somit können wir die Langlebigkeit unserer Produkte garantieren und einen möglichst hohen Qualitätsstandard gewährleisten.<\/p>","button_1_text":"","button_1_link":"","button_1_style":"solid","button_2_text":"","button_2_link":"","button_2_style":"solid","background":"","text_color":"","button_background":"","button_text_color":""}}},"order":["main","698733d5-a0dd-4ab7-a4d3-3e667232ae84","7a71d9d6-83c3-4606-ae7c-2d155465f254","related-products","3b662f61-c12a-40bb-9f58-3ce1ebb54771","65d5394b-714b-495b-a7ab-617877747ec5"]}
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "vendor",
+          "disabled": true,
+          "settings": {
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "heading_tag": "h3"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_taxes_notice": false
+          }
+        },
+        "payment_terms": {
+          "type": "payment_terms",
+          "settings": {
+          }
+        },
+        "separator": {
+          "type": "separator",
+          "settings": {
+          }
+        },
+        "description": {
+          "type": "description",
+          "disabled": true,
+          "settings": {
+            "collapse_content": false,
+            "show_below_gallery": false
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "hide_sold_out_variants": false,
+            "selector_type": "block",
+            "color_selector_type": "color",
+            "size_chart_page": ""
+          }
+        },
+        "a065e071-7feb-48c6-b74f-ee9848c8ece0": {
+          "type": "inventory_status",
+          "settings": {
+            "inventory_threshold": 13,
+            "indicator_size": 13,
+            "text_in_stock": "Verfügbar",
+            "text_low_stock": "Wenige verfügbar",
+            "text_no_stock": "Ausverkauft",
+            "text_size": 12,
+            "margin_top": 7.5,
+            "margin_bottom": 7.5
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_payment_button": true,
+            "hide_branded_buy_buttons": true,
+            "show_gift_card_recipient": false,
+            "atc_button_background": "",
+            "atc_button_text_color": "",
+            "payment_button_background": "",
+            "payment_button_text_color": ""
+          }
+        },
+        "048e4631-a890-47d6-b484-6b9903c94b25": {
+          "type": "iwt",
+          "settings": {
+            "alignment_on_mobile": "flex-start",
+            "icon": "truck",
+            "icon_size": 30,
+            "text": "Kostenloser Versand ab 150€",
+            "text_color": "#444444",
+            "text_size": 14,
+            "margin_top": -25,
+            "margin_bottom": 2.5
+          }
+        },
+        "653933da-3ce1-4f12-8d8f-8fff7ec9751b": {
+          "type": "klarna_placement",
+          "settings": {
+            "icon_size": 28,
+            "text": "Bezahle in 30 Tagen mit Klarna.",
+            "text_color": "#444444",
+            "link_text": "Mehr erfahren",
+            "link_text_color": "#0070ba",
+            "text_size": 14,
+            "margin_top": 3,
+            "margin_bottom": 7.5,
+            "text_after_price": "in 30 Tagen bezahlen",
+            "text_under_price": "Erhalte mehr Zeit zum Bezahlen.",
+            "bullet_text_1": "Lege deine(n) Artikel in den Warenkorb",
+            "bullet_text_2": "Gehe zur Kasse und bezahle mit",
+            "bullet_text_3": "Jetzt shoppen und in bis zu 30 Tagen bezahlen",
+            "bullet_text_4": "Benutze die Klarna-App oder melde dich auf klarna.de an, um deine Zahlung zu tätigen."
+          }
+        },
+        "25a1e6fe-861f-4e09-ae48-8fbe0449b2b7": {
+          "type": "paypal_placement",
+          "settings": {
+            "icon_size": 19,
+            "text": "Bezahle nach 30 Tagen.",
+            "text_color": "#444444",
+            "link_text": "Mehr erfahren",
+            "link_text_color": "#0070ba",
+            "text_size": 14,
+            "margin_top": 0,
+            "margin_bottom": 0
+          }
+        },
+        "f42d1416-d63c-4dc7-9a66-5e357231c72d": {
+          "type": "iwt",
+          "settings": {
+            "alignment_on_mobile": "flex-start",
+            "icon": "returns",
+            "icon_size": 26,
+            "text": "Kostenlose Retoure",
+            "text_color": "#444444",
+            "text_size": 14,
+            "margin_top": 7.5,
+            "margin_bottom": 7.5
+          }
+        },
+        "c8939192-65a3-45bb-9a70-1d73baa46e6d": {
+          "type": "iwt",
+          "settings": {
+            "alignment_on_mobile": "flex-start",
+            "icon": "checkmark",
+            "icon_size": 25,
+            "text": "14 Tage Rückgaberecht",
+            "text_color": "#444444",
+            "text_size": 14,
+            "margin_top": 7.5,
+            "margin_bottom": 7.5
+          }
+        },
+        "complementary_products": {
+          "type": "complementary_products",
+          "settings": {
+            "title": "Pairs well with",
+            "products_count": 2,
+            "show_below_gallery": true,
+            "stack_products": false,
+            "show_quick_buy": true
+          }
+        },
+        "8a4e5ede-8f6b-411f-b7ae-37fce767f93b": {
+          "type": "accordion",
+          "settings": {
+            "show_below_gallery": true,
+            "icon": "picto-box",
+            "title": "Versand",
+            "content": "<p><strong>Kostenloser & schneller Versand<\/strong><\/p><p>Ab einem Bestellwert von 150€ ist der Versand kostenlos.<\/p><p>Wir versenden Deine Bestellung innerhalb von 1 bis 3 Werktagen nach Bestelleingang.<\/p><p>Sobald wir Deine Bestellung verschickt haben, erhältst Du von uns eine Versandbestätigung per E-Mail.<\/p>",
+            "page": ""
+          }
+        },
+        "3ebb957b-813a-4741-8e71-8473b3d250e6": {
+          "type": "accordion",
+          "disabled": true,
+          "settings": {
+            "show_below_gallery": true,
+            "icon": "picto-return",
+            "title": "Rückerstattung",
+            "content": "<p>Share some content to your customers about your products.<\/p>",
+            "page": ""
+          }
+        },
+        "5eca4b6f-578b-4b52-958e-6c8dc2a78350": {
+          "type": "iwt",
+          "disabled": true,
+          "settings": {
+            "alignment_on_mobile": "flex-start",
+            "icon": "paypal",
+            "icon_size": 19,
+            "text": "Bezahle nach 30 Tagen",
+            "text_color": "#444444",
+            "text_size": 16,
+            "margin_top": 7.5,
+            "margin_bottom": 7.5
+          }
+        },
+        "da08db23-3f3b-4f41-a08d-6a5ad013661d": {
+          "type": "accordion",
+          "disabled": true,
+          "settings": {
+            "show_below_gallery": true,
+            "icon": "none",
+            "title": "Title",
+            "content": "<p>Share some content to your customers about your products.<\/p>",
+            "page": ""
+          }
+        },
+        "00a97a2d-1975-4dcc-bf86-c1f112ddeffc": {
+          "type": "accordion",
+          "settings": {
+            "show_below_gallery": true,
+            "icon": "picto-customer-support",
+            "title": "FAQ",
+            "content": "<p><strong>Welche Größe brauche ich?<\/strong><\/p><p>Unsere Produkte<br\/>fallen etwas größer aus. Daher empfehlen wir dir eine Größe kleiner. Am besten nimmst<br\/>du unser „Fit-Quiz“ als Hilfe - damit findest du deine passende Größe.<\/p><p><strong>Wie gebe ich Produkte zurück?<\/strong><\/p><p>Du hast bei uns bestellt, aber dir gefällt das Produkt nicht<br\/>oder du hast einfach die falsche Größe für dich gewählt? <\/p><p>Kein Problem!<\/p><p>Über den folgenden Link gelangst du zu unserem Retourenportal,<br\/>in dem du <strong>mit deiner Bestellnummer und deiner E-Mail<\/strong> deine<br\/>Rücksendung oder deinen Umtausch online abwickeln kannst. <a href=\"https:\/\/spoiltsociety.com\/apps\/returns\">Zum Retourenportal <\/a><\/p><p><\/p>",
+            "page": ""
+          }
+        }
+      },
+      "settings": {
+        "container_size": "lg",
+        "product_info_size": 30,
+        "show_sticky_add_to_cart": true,
+        "center_basic_info": true,
+        "desktop_media_layout": "grid",
+        "desktop_media_grid_gap": 20,
+        "mobile_controls": "thumbnails",
+        "enable_media_autoplay": true,
+        "enable_video_looping": true,
+        "enable_image_zoom": true,
+        "max_image_zoom_level": 3
+      }
+    },
+    "7a71d9d6-83c3-4606-ae7c-2d155465f254": {
+      "type": "text-with-icons",
+      "blocks": {
+        "template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-0": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-gift",
+            "icon_width": 24,
+            "mobile_icon_width": 24,
+            "title": "Belohnungen",
+            "content": "<p>Bei jedem Kauf sammelst Du Punkte in deinem Konto!<\/p>"
+          }
+        },
+        "template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-1": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-customer-support",
+            "icon_width": 24,
+            "mobile_icon_width": 24,
+            "title": "Service",
+            "content": "<p>Wir sind durchgängig für dich erreichbar!<\/p>"
+          }
+        },
+        "template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-2": {
+          "type": "item",
+          "settings": {
+            "icon": "picto-shield",
+            "icon_width": 24,
+            "mobile_icon_width": 24,
+            "title": "Sichere Bezahlmethoden",
+            "content": "<p>Deine Zahlungsdaten werden sicher verarbeitet!<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-0",
+        "template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-1",
+        "template--17937087037708__7a71d9d6-83c3-4606-ae7c-2d155465f254-168313435187bfba09-2"
+      ],
+      "settings": {
+        "separate_section_with_border": true,
+        "stack_on_mobile": false,
+        "icon_color": "",
+        "text_color": "",
+        "text_alignment": "center"
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "separate_section_with_border": false,
+        "hide_product_information": false,
+        "stack_products": false,
+        "recommendations_count": 10,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "horizontal_spacing_factor": 0.2,
+        "vertical_spacing_factor": 0.2,
+        "subheading": "Das wird dir auch gefallen",
+        "title": "",
+        "content": ""
+      }
+    },
+    "3b662f61-c12a-40bb-9f58-3ce1ebb54771": {
+      "type": "multiple-media-with-text",
+      "blocks": {
+        "template--17937087037708__3b662f61-c12a-40bb-9f58-3ce1ebb54771-16832840289e699358-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Naehen.jpg",
+            "rotation": 0
+          }
+        }
+      },
+      "block_order": [
+        "template--17937087037708__3b662f61-c12a-40bb-9f58-3ce1ebb54771-16832840289e699358-0"
+      ],
+      "settings": {
+        "reveal_on_scroll": true,
+        "separate_section_with_border": true,
+        "media_position_desktop": "before_text",
+        "media_position_mobile": "before_text",
+        "media_layout": "overlap",
+        "media_alignment": "center",
+        "media_alignment_offset": 0,
+        "media_mobile_alignment_offset": 0,
+        "text_alignment": "center",
+        "subheading": "Produktion",
+        "title": "Handmade in der Türkei",
+        "content": "<p>Unsere Produkte werden unter fairen Arbeitsbedingungen in der Türkei hergestellt.<\/p>",
+        "button_1_text": "",
+        "button_1_link": "",
+        "button_1_style": "solid",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "solid",
+        "background": "",
+        "text_color": "",
+        "button_background": "",
+        "button_text_color": ""
+      }
+    },
+    "65d5394b-714b-495b-a7ab-617877747ec5": {
+      "type": "multiple-media-with-text",
+      "blocks": {
+        "template--17937087037708__65d5394b-714b-495b-a7ab-617877747ec5-16832840289e699358-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Fabrik.jpg",
+            "rotation": 0
+          }
+        }
+      },
+      "block_order": [
+        "template--17937087037708__65d5394b-714b-495b-a7ab-617877747ec5-16832840289e699358-0"
+      ],
+      "settings": {
+        "reveal_on_scroll": true,
+        "separate_section_with_border": true,
+        "media_position_desktop": "before_text",
+        "media_position_mobile": "before_text",
+        "media_layout": "overlap",
+        "media_alignment": "center",
+        "media_alignment_offset": 0,
+        "media_mobile_alignment_offset": 0,
+        "text_alignment": "center",
+        "subheading": "Qualitätsstandard",
+        "title": "Hochwertige Materialien",
+        "content": "<p>Wir verwenden nur die hochwertigsten Baumwollfasern für den Webprozess. Somit können wir die Langlebigkeit unserer Produkte garantieren und einen möglichst hohen Qualitätsstandard gewährleisten.<\/p>",
+        "button_1_text": "",
+        "button_1_link": "",
+        "button_1_style": "solid",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "solid",
+        "background": "",
+        "text_color": "",
+        "button_background": "",
+        "button_text_color": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "7a71d9d6-83c3-4606-ae7c-2d155465f254",
+    "related-products",
+    "3b662f61-c12a-40bb-9f58-3ce1ebb54771",
+    "65d5394b-714b-495b-a7ab-617877747ec5"
+  ]
+}

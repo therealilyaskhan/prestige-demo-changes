@@ -137,7 +137,7 @@
         {%- if show_title or show_prices -%}
           <div class="v-stack justify-items-center gap-1">
             {%- if show_title -%}
-              <span>{{- variant.id -}}</span>
+              <span>{{- product.title -}}</span>
               <a
                 href="{{ variant.url }}"
                 class="product-title {% if text_class != blank %}{{ text_class }}{% endif %} {% if settings.product_title_max_lines > 0 %}line-clamp{% endif %}"

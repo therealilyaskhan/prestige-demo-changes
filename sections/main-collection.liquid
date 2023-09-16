@@ -363,6 +363,7 @@
                       loading = true;
 
                       const nextPageUrl = '{{ shop.url }}/{{ paginate.next.url }}';
+                      console.log(nextPageUrl);
 
                       fetch(nextPageUrl)
                         .then((response) => response.text())

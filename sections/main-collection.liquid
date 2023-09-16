@@ -356,7 +356,7 @@
                 <script>
                   document.addEventListener('DOMContentLoaded', function () {
                     let loading = false;
-                    let totalPages = +'{{ paginate.pages }}';
+                    let totalPages = parseInt('{{ paginate.pages }}');
                     let currentPage = 1;
 
                     // Function to load more products

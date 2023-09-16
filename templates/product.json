@@ -216,6 +216,29 @@
           }
         }
       },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "payment_terms",
+        "separator",
+        "description",
+        "variant_picker",
+        "a065e071-7feb-48c6-b74f-ee9848c8ece0",
+        "quantity_selector",
+        "buy_buttons",
+        "048e4631-a890-47d6-b484-6b9903c94b25",
+        "653933da-3ce1-4f12-8d8f-8fff7ec9751b",
+        "25a1e6fe-861f-4e09-ae48-8fbe0449b2b7",
+        "f42d1416-d63c-4dc7-9a66-5e357231c72d",
+        "c8939192-65a3-45bb-9a70-1d73baa46e6d",
+        "complementary_products",
+        "8a4e5ede-8f6b-411f-b7ae-37fce767f93b",
+        "3ebb957b-813a-4741-8e71-8473b3d250e6",
+        "5eca4b6f-578b-4b52-958e-6c8dc2a78350",
+        "da08db23-3f3b-4f41-a08d-6a5ad013661d",
+        "00a97a2d-1975-4dcc-bf86-c1f112ddeffc"
+      ],
       "settings": {
         "container_size": "lg",
         "product_info_size": 30,

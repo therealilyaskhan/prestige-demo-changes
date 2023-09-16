@@ -630,6 +630,78 @@
         "logo_item_background": "",
         "logo_item_border": ""
       }
+    },
+    "de4b5b81-600b-4166-acbb-2e5b421a300c": {
+      "type": "image-with-text",
+      "blocks": {
+        "template--20995237740831__de4b5b81-600b-4166-acbb-2e5b421a300c-subheading-1": {
+          "type": "subheading",
+          "settings": {
+            "text": "Subheading"
+          }
+        },
+        "template--20995237740831__de4b5b81-600b-4166-acbb-2e5b421a300c-heading-1": {
+          "type": "heading",
+          "settings": {
+            "text": "Image with text",
+            "heading_tag": "h1"
+          }
+        },
+        "template--20995237740831__de4b5b81-600b-4166-acbb-2e5b421a300c-richtext-1": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "template--20995237740831__de4b5b81-600b-4166-acbb-2e5b421a300c-subheading-1",
+        "template--20995237740831__de4b5b81-600b-4166-acbb-2e5b421a300c-heading-1",
+        "template--20995237740831__de4b5b81-600b-4166-acbb-2e5b421a300c-richtext-1"
+      ],
+      "settings": {
+        "separate_section_with_border": true,
+        "reveal_on_scroll": true,
+        "image_position": "end",
+        "content_width": "lg",
+        "remove_vertical_spacing": true
+      }
+    },
+    "fd49d28e-5fbe-4f7f-a06a-3d8bc1ca47ca": {
+      "type": "image-with-text",
+      "blocks": {
+        "template--20995237740831__fd49d28e-5fbe-4f7f-a06a-3d8bc1ca47ca-subheading-1": {
+          "type": "subheading",
+          "settings": {
+            "text": "Subheading"
+          }
+        },
+        "template--20995237740831__fd49d28e-5fbe-4f7f-a06a-3d8bc1ca47ca-heading-1": {
+          "type": "heading",
+          "settings": {
+            "text": "Image with text",
+            "heading_tag": "h1"
+          }
+        },
+        "template--20995237740831__fd49d28e-5fbe-4f7f-a06a-3d8bc1ca47ca-richtext-1": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "template--20995237740831__fd49d28e-5fbe-4f7f-a06a-3d8bc1ca47ca-subheading-1",
+        "template--20995237740831__fd49d28e-5fbe-4f7f-a06a-3d8bc1ca47ca-heading-1",
+        "template--20995237740831__fd49d28e-5fbe-4f7f-a06a-3d8bc1ca47ca-richtext-1"
+      ],
+      "settings": {
+        "separate_section_with_border": true,
+        "reveal_on_scroll": true,
+        "image_position": "start",
+        "content_width": "sm",
+        "remove_vertical_spacing": true
+      }
     }
   },
   "order": [
@@ -644,6 +716,8 @@
     "newsletter",
     "shop-the-look",
     "blog-posts",
-    "cbf4e5b4-0489-4279-912c-22fb77f6f0b7"
+    "cbf4e5b4-0489-4279-912c-22fb77f6f0b7",
+    "de4b5b81-600b-4166-acbb-2e5b421a300c",
+    "fd49d28e-5fbe-4f7f-a06a-3d8bc1ca47ca"
   ]
 }

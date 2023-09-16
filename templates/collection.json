@@ -22,7 +22,7 @@
       "type": "main-collection",
       "settings": {
         "show_variants_as_products": false,
-        "autoload_enabled": true,
+        "autoload_enabled": false,
         "hide_product_information": false,
         "products_per_page": 8,
         "products_per_row_mobile": "2",

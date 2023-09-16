@@ -341,7 +341,7 @@
                     {%- endfor -%}
                   {% else %}
                     {%- render 'product-card',
-                      product: variant,
+                      product: product,
                       reveal: settings.stagger_products_apparition,
                       hide_product_information: section.settings.hide_product_information,
                       stacked: true

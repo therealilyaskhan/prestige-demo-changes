@@ -3610,6 +3610,26 @@ var ProductList = class extends HTMLElement {
       easing: "ease-in-out",
       delay: stagger(0.05, { start: 0.4, easing: "ease-out" })
     });
+
+    // mik added custom javascript for smooth animation when new childnodes are added to reveal-items elements
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.addedNodes.length > 0) {
+          animate9(mutation.addedNodes, {
+            opacity: [0, 1],
+            transform: ["translateY(20px)", "translateY(0)"]
+          }, {
+            duration: 0.2,
+            easing: "ease-in-out",
+            delay: stagger(0.05, { start: 0.4, easing: "ease-out" })
+          });
+        }
+      });
+    });
+    
+    observer.observe(this.querySelector('product-list.product-list'), { attributes: true, subtree: false, childList: true });
+    // mik added custom javascript for smooth animation when new childnodes are added to reveal-items elements
+
   }
 };
 if (!window.customElements.get("product-list")) {

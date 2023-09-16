@@ -1,0 +1,726 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+PRODUCT INFO
+----------------------------------------------------------------------------------------------------------------------
+
+This snippet renders all the blocks of a given product. It uses the blocks of the section currently in use (there is
+no need to manually pass the section as it is globally available)
+
+********************************************
+Supported variables
+********************************************
+
+* product: the product on which to render the information (if blank, it renders placeholder information)
+* center_basic_info: if true, the basic information (product title, vendor, price) are centered on mobile
+* has_content_below_gallery: if true, the product has extra information show below the gallery
+* allow_blocks: a list of blocks name to include. If none is passed, assumes to show all the blocks
+* update_url: if set to true, the URL on the page is updated when the variant changes (for best experience, this should
+              be only used on the product page for the main product
+{%- endcomment -%}
+
+{%- capture product_form_id -%}product-form-{{ product.id }}-{{ section.id }}{%- endcapture -%}
+
+<safe-sticky class="product-info {% if center_basic_info %}product-info--center{% endif %}">
+  <div class="product-info__block-list">
+    {%- assign inside_block_group_context = false -%}
+    {%- assign current_block_group_name = '' -%}
+
+    {%- for block in section.blocks -%}
+      {%- liquid
+        # Filter the blocks (if allow_blocks is set)
+        if allow_blocks
+          unless allow_blocks contains block.type
+            continue
+          endunless
+        endif
+
+        assign next_block_index = forloop.index0 | plus: 1
+        assign next_block = section.blocks[next_block_index]
+
+        if block.settings.show_below_gallery
+          continue
+        endif
+
+        comment
+        You can use your own condition to create smart grouping. When two or more blocks match the condition, they are
+        automatically grouped by a div that will take the desired class. This can even work for more than 2 elements
+        (for instance if you specify accordion follow by an accordion). The theme takes care of properly opening and
+        closing the group for proper HTML. In order to make it work, you need to create one condition explaining when
+        to enter into the group, and you need to indicate a block_group_class and block_group_name. Most of the time,
+        the two will be identical. However, the block_group_name must be unique. This means that as long as the block_group_name
+        stays the same, then another group will not be created as long as the conditions match.
+        endcomment
+
+        assign allow_block_group = true
+
+        if block.type == 'price' and block.settings.show_taxes_notice == false and next_block.type == 'rating'
+          assign block_group_class = 'text-with-rating'
+          assign block_group_name = 'text-with-rating'
+        elsif block.type == 'rating' and next_block.type == 'price' and next_block.settings.show_taxes_notice == false
+          assign block_group_class = 'text-with-rating'
+          assign block_group_name = 'text-with-rating'
+        elsif block.type == 'sku' and next_block.type == 'rating'
+          assign block_group_class = 'text-with-rating'
+          assign block_group_name = 'text-with-rating'
+        elsif block.type == 'rating' and next_block.type == 'sku'
+          assign block_group_class = 'text-with-rating'
+          assign block_group_name = 'text-with-rating'
+        elsif block.type == 'accordion' and next_block.type == 'accordion' and next_block.settings.show_below_gallery != true
+          assign block_group_class = 'accordion-group'
+          assign block_group_name = 'accordion-group'
+        elsif block.type == 'accordion' and next_block.type == 'description' and product.description != blank and next_block.settings.collapse_content and next_block.settings.show_below_gallery != true
+          assign block_group_class = 'accordion-group'
+          assign block_group_name = 'accordion-group'
+        elsif block.type == 'description' and product.description != blank and block.settings.collapse_content and next_block.type == 'accordion' and next_block.settings.show_below_gallery != true
+          assign block_group_class = 'accordion-group'
+          assign block_group_name = 'accordion-group'
+        elsif block.type == 'feature_with_icon' and next_block.type == 'feature_with_icon'
+          assign block_group_class = 'feature-badge-list'
+          assign block_group_name = 'feature-badge-list'
+        else
+          assign allow_block_group = false
+          assign block_group_class = ''
+          assign current_block_group_name = ''
+        endif
+
+        if allow_block_group
+          assign new_block_group_name = block_group_name
+
+          if inside_block_group_context == true and new_block_group_name != current_block_group_name
+            assign allow_block_group = false
+          else
+            assign current_block_group_name = new_block_group_name
+          endif
+        endif
+      -%}
+
+      {%- capture block_content -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            {%- render block -%}
+          {% comment %} mik added inventory status indicator {% endcomment %}
+          {%- when 'inventory_status' -%}
+            {%- render 'inventory-status', block: block, current_variant: product.selected_or_first_available_variant -%}
+          {% comment %} mik added KLARNA on-site messaging {% endcomment %}
+          {%- when 'paypal_placement' -%}
+            {% style %}
+            .paypal-placement-{{ block.id }} {
+              padding-inline-start: 0.25rem;
+              margin: {{ block.settings.margin_top | times: 0.85 | round: 0 }}px 0px {{ block.settings.margin_bottom | times: 0.85 | round: 0 }}px 0px;
+            }
+            .paypal-placement-{{ block.id }} svg.icon {
+              display: inline-block;
+              width: {{ block.settings.icon_size }}px;
+              height: auto;
+            }
+            .paypal-placement-{{ block.id }} .icon-and-text__text {
+              color: {{ block.settings.text_color }};
+              font-size: {{ block.settings.text_size }}px;
+            }
+            .paypal-placement-{{ block.id }} .icon-and-text__link {
+              color: {{ block.settings.link_text_color }};
+            }
+            @media screen and (min-width: 700px) {
+              .paypal-placement-{{ block.id }} {
+                margin-top: {{ block.settings.margin_top }}px;
+                margin-bottom: {{ block.settings.margin_bottom }}px;
+              }
+            }
+            {% endstyle %}
+            
+            <div class="icon-and-text paypal-placement-{{ block.id }}">
+              <div class="icon-and-text__icon">
+                <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--full-color" viewBox="0 0 24 32" preserveAspectRatio="xMinYMin meet"><path fill="#009cde" opacity="1" d="M 20.924 7.157 C 21.204 5.057 20.924 3.657 19.801 2.357 C 18.583 0.957 16.43 0.257 13.716 0.257 L 5.758 0.257 C 5.29 0.257 4.729 0.757 4.634 1.257 L 1.358 23.457 C 1.358 23.857 1.639 24.357 2.107 24.357 L 6.975 24.357 L 6.694 26.557 C 6.6 26.957 6.881 27.257 7.255 27.257 L 11.375 27.257 C 11.844 27.257 12.311 26.957 12.405 26.457 L 12.405 26.157 L 13.247 20.957 L 13.247 20.757 C 13.341 20.257 13.809 19.857 14.277 19.857 L 14.84 19.857 C 18.864 19.857 21.954 18.157 22.89 13.157 C 23.358 11.057 23.172 9.357 22.048 8.157 C 21.767 7.757 21.298 7.457 20.924 7.157 L 20.924 7.157"></path><path fill="#012169" opacity="1" d="M 20.924 7.157 C 21.204 5.057 20.924 3.657 19.801 2.357 C 18.583 0.957 16.43 0.257 13.716 0.257 L 5.758 0.257 C 5.29 0.257 4.729 0.757 4.634 1.257 L 1.358 23.457 C 1.358 23.857 1.639 24.357 2.107 24.357 L 6.975 24.357 L 8.286 16.057 L 8.192 16.357 C 8.286 15.757 8.754 15.357 9.315 15.357 L 11.655 15.357 C 16.243 15.357 19.801 13.357 20.924 7.757 C 20.831 7.457 20.924 7.357 20.924 7.157"></path><path fill="#003087" opacity="1" d="M 9.504 7.157 C 9.596 6.857 9.784 6.557 10.065 6.357 C 10.251 6.357 10.345 6.257 10.532 6.257 L 16.711 6.257 C 17.461 6.257 18.208 6.357 18.772 6.457 C 18.958 6.457 19.146 6.457 19.333 6.557 C 19.52 6.657 19.707 6.657 19.801 6.757 C 19.894 6.757 19.987 6.757 20.082 6.757 C 20.362 6.857 20.643 7.057 20.924 7.157 C 21.204 5.057 20.924 3.657 19.801 2.257 C 18.677 0.857 16.525 0.257 13.809 0.257 L 5.758 0.257 C 5.29 0.257 4.729 0.657 4.634 1.257 L 1.358 23.457 C 1.358 23.857 1.639 24.357 2.107 24.357 L 6.975 24.357 L 8.286 16.057 L 9.504 7.157 Z"></path></svg>
+              </div>
+              <span class="icon-and-text__text">
+                {{- block.settings.text }}&nbsp;<span id="pp-modal-opener" class="icon-and-text__link">
+                  {{- block.settings.link_text -}}
+                </span></span
+              >
+              {% render 'paypal-osm-modal',
+                variant_price: product.selected_or_first_available_variant.price,
+                block_settings: block.settings
+              %}
+            </div>
+          {% comment %} mik added KLARNA on-site messaging {% endcomment %}
+          {%- when 'klarna_placement' -%}
+            {% style %}
+              .klarna-placement-{{ block.id }} {
+                padding-inline-start: 0.25rem;
+                margin: {{ block.settings.margin_top | times: 0.85 | round: 0 }}px 0px {{ block.settings.margin_bottom | times: 0.85 | round: 0 }}px 0px;
+              }
+              .klarna-placement-{{ block.id }} .icon {
+                display: inline-block;
+                width: {{ block.settings.icon_size }}px;
+                height: auto;
+              }
+              .klarna-placement-{{ block.id }} .icon-and-text__text {
+                color: {{ block.settings.text_color }};
+                font-size: {{ block.settings.text_size }}px;
+              }
+              .klarna-placement-{{ block.id }} .icon-and-text__link {
+                color: {{ block.settings.link_text_color }};
+              }
+              @media screen and (min-width: 700px) {
+                .klarna-placement-{{ block.id }} {
+                  margin-top: {{ block.settings.margin_top }}px;
+                  margin-bottom: {{ block.settings.margin_bottom }}px;
+                }
+              }
+            {% endstyle %}
+            <div class="icon-and-text klarna-placement-{{ block.id }}">
+              <div class="icon-and-text__icon">
+                <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--full-color" viewBox="0 0 26 18" fill="none"><rect width="25.875" height="18" rx="2.5" fill="#FEB4C7"></rect><path fill-rule="evenodd" clip-rule="evenodd" d="M4.0099 11.5347H2.95703V6.75H4.0099V11.5347ZM6.63848 6.75H5.60845C5.60845 7.63051 5.2203 8.43868 4.54356 8.96741L4.13548 9.28615L5.71666 11.5349H7.01669L5.5618 9.46571C6.25144 8.74946 6.63848 7.78586 6.63848 6.75ZM8.31781 11.5333H7.3235V6.75083H8.31781V11.5333ZM11.3219 8.22524V8.43687C11.0536 8.24598 10.7298 8.1338 10.3805 8.1338C9.45616 8.1338 8.70681 8.91535 8.70681 9.87944C8.70681 10.8435 9.45616 11.6251 10.3805 11.6251C10.7298 11.6251 11.0536 11.5129 11.3219 11.3221V11.5335H12.2716V8.22524H11.3219ZM11.319 9.87954C11.319 10.3496 10.9337 10.7307 10.4585 10.7307C9.98325 10.7307 9.59796 10.3496 9.59796 9.87954C9.59796 9.40946 9.98325 9.02845 10.4585 9.02845C10.9337 9.02845 11.319 9.40946 11.319 9.87954ZM21.3409 8.43687V8.22524H22.2906V11.5335H21.3409V11.3221C21.0726 11.5129 20.7488 11.6251 20.3995 11.6251C19.4751 11.6251 18.7258 10.8435 18.7258 9.87944C18.7258 8.91535 19.4751 8.1338 20.3995 8.1338C20.7488 8.1338 21.0726 8.24598 21.3409 8.43687ZM20.4775 10.7307C20.9527 10.7307 21.338 10.3496 21.338 9.87954C21.338 9.40946 20.9527 9.02845 20.4775 9.02845C20.0022 9.02845 19.617 9.40946 19.617 9.87954C19.617 10.3496 20.0022 10.7307 20.4775 10.7307ZM17.0382 8.13634C16.6588 8.13634 16.2998 8.25918 16.0598 8.59808V8.22551H15.1142V11.5336H16.0714V9.79507C16.0714 9.29199 16.3948 9.04564 16.7843 9.04564C17.2017 9.04564 17.4416 9.30569 17.4416 9.78822V11.5336H18.3902V9.42978C18.3902 8.65991 17.8033 8.13634 17.0382 8.13634ZM13.7407 8.2252V8.65607C13.9311 8.39762 14.2858 8.22539 14.6715 8.22539V9.18804L14.6662 9.18782L14.6602 9.1876C14.2844 9.1876 13.7429 9.46771 13.7429 9.98882V11.5334H12.7684V8.2252H13.7407ZM22.7028 10.9814C22.7028 10.6381 22.9696 10.3599 23.2987 10.3599C23.6278 10.3599 23.8947 10.6381 23.8947 10.9814C23.8947 11.3247 23.6278 11.603 23.2987 11.603C22.9696 11.603 22.7028 11.3247 22.7028 10.9814Z" fill="#17120F"></path></svg>
+              </div>
+              <span class="icon-and-text__text">{{ block.settings.text }}&nbsp;<span id="klarna-modal-opener" class="icon-and-text__link">{{ block.settings.link_text }}</span></span>
+              {% render 'klarna-osm-modal', variant_price: product.selected_or_first_available_variant.price, block_settings: block.settings %}
+            </div>
+          {% comment %} mik added KLARNA on-site messaging {% endcomment %}
+
+          {% comment %} mik added {% endcomment %}
+          {%- when 'iwt' -%}
+            {%- unless block.settings.text == blank -%}
+              {% style %}
+                .sales-point-{{ block.id }} {
+                  margin-top: {{ block.settings.margin_top | times: 0.85 | round: 0 }}px;
+                  margin-bottom: {{ block.settings.margin_bottom | times: 0.85 | round: 0 }}px;
+                }
+                .sales-point-{{ block.id }} .icon {
+                  display: inline-block;
+                  width: {{ block.settings.icon_size }}px;
+                  height: auto;
+                }
+                .sales-point-{{ block.id }} .icon-and-text__text {
+                  color: {{ block.settings.text_color }};
+                  font-size: {{ block.settings.text_size }}px;
+                }
+                @media screen and (max-width: 699px) {
+                  .sales-point-{{ block.id }} .icon-and-text{
+                    justify-content: {{ block.settings.alignment_on_mobile }};
+                  } 
+                }
+                @media screen and (min-width: 700px) {
+                  .sales-point-{{ block.id }} {
+                    margin-top: {{ block.settings.margin_top }}px;
+                    margin-bottom: {{ block.settings.margin_bottom }}px;
+                  }
+                }
+              {% endstyle %}
+              <div class="sales-point-{{ block.id }}" {{ block.shopify_attributes }}>
+                <ul class="sales-points">
+                  <li class="sales-point">
+                    <span class="icon-and-text">
+                      {% case block.settings.icon %}
+                        {% comment %} mik added icon thumbs up {% endcomment %}
+                        {% when 'in_stock_signal' %}
+                          <svg class="icon icon--full-color" width="25" height="25" aria-hidden="true">
+                            <circle cx="12.5" cy="12.5" r="10.5" fill="rgb(62,214,96, 0.3)"/>
+                            <circle cx="12.5" cy="12.5" r="7" stroke="rgb(255, 255, 255)" stroke-width="1" fill="rgb(62,214,96)"/>
+                          </svg>
+                        {% when 'thumbs_up' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--full-color icon-thumbs-up" viewBox="0 0 1501.7 1504.4"><style>.st0{fill:#5e91ff}.st1{fill:#fff}</style><ellipse class="st0" cx="750.8" cy="752.2" rx="750.8" ry="752.2"/><path class="st1" d="M378.3 667.5h165.1c13 0 23.6 10.5 23.6 23.6v379.1c0 13-10.5 23.6-23.6 23.6H378.3c-13 0-23.6-10.5-23.6-23.6V691c.1-13 10.6-23.5 23.6-23.5zM624.7 1004.7V733.1c.1-66.9 18.8-132.4 54.1-189.2 21.5-34.4 69.7-89.5 96.7-118 6-6.4 27.8-25.2 27.8-35.5 0-13.2 1.5-34.5 2-74.2.3-25.2 20.8-45.9 46-45.7h1.1c44.1.8 58.2 41.6 58.2 41.6s37.7 74.4 2.5 165.4c-29.7 76.9-35.8 83.1-35.8 83.1s-9.6 13.9 20.8 13.3c0 0 185.6-.8 192-.8 13.7 0 57.4 12.5 54.9 68.2-1.8 41.2-27.4 55.6-40.5 60.3-1.7.6-2.6 2.5-1.9 4.2.3.7.8 1.3 1.5 1.7 13.4 7.8 40.8 27.5 40.2 57.7-.8 36.6-15.5 50.1-46.1 58.5-1.7.4-2.8 2.2-2.3 3.9.2.9.8 1.6 1.5 2 11.6 6.6 31.5 22.7 30.3 55.3-1.2 33.2-25.2 44.9-38.3 48.9-1.7.5-2.7 2.3-2.2 4 .2.7.7 1.4 1.3 1.8 8.3 5.7 20.6 18.6 20 45.1-.3 14-5 24.2-10.9 31.5-9.3 11.5-23.9 17.5-38.7 17.6l-411.8.8c-.1-.1-22.4 0-22.4-29.9z"/></svg>
+                          </div>
+                        {% when 'green_checkmark' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--full-color" viewBox="0 0 60 60"><g><circle cx="30" cy="30" r="29" fill="#5edd60" data-original="#5edd60" class=""></circle><path fill="#ffffff" d="m24.262 42.07-6.8-6.642a1.534 1.534 0 0 1 0-2.2l2.255-2.2a1.621 1.621 0 0 1 2.256 0l4.048 3.957 11.353-17.26a1.617 1.617 0 0 1 2.2-.468l2.684 1.686a1.537 1.537 0 0 1 .479 2.154L29.294 41.541a3.3 3.3 0 0 1-5.032.529z" data-original="#ffffff"></path></g></svg>
+                          </div>
+                        {% when 'bolt' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--full-color" viewBox="0 0 512 512"><g><path d="M400.268 175.599a8.53 8.53 0 0 0-7.731-4.932h-101.12l99.797-157.568a8.529 8.529 0 0 0 .265-8.678A8.533 8.533 0 0 0 384.003 0H247.47a8.541 8.541 0 0 0-7.637 4.719l-128 256a8.522 8.522 0 0 0 .375 8.294 8.546 8.546 0 0 0 7.262 4.053h87.748l-95.616 227.089a8.55 8.55 0 0 0 3.413 10.59 8.55 8.55 0 0 0 10.983-1.775l273.067-324.267a8.541 8.541 0 0 0 1.203-9.104z" fill="#ff0000" data-original="#000000" class=""></path></g></svg>
+                          </div>
+                        {% when 'returns' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon" viewBox="0 0 29 22" fill="none"><g opacity="0.7"><path d="M8.81147 1.43053C13.1282 1.43053 16.6229 4.9253 16.6229 9.242C16.6229 13.5587 13.1282 17.0535 8.81147 17.0535C4.49477 17.0535 1 13.5587 1 9.242C1 7.08365 1.87212 5.13235 3.29011 3.72064C4.07439 2.93635 5.02181 2.3152 6.08216 1.9262" stroke="black" stroke-width="1.0647" stroke-miterlimit="10" stroke-linecap="square"></path><path d="M7.4939 1.5121L9.73381 0L9.26951 1.5121L10.0287 2.86107L7.4939 1.5121Z" fill="black"></path><path d="M13.2726 11.8584C13.2601 10.0012 13.0279 6.28683 12.9589 6.33702C11.8232 7.09621 10.2986 7.08366 8.90571 6.93935C7.51282 6.79504 6.07601 6.55035 4.73332 6.93308C4.17491 7.08993 3.64787 7.35973 3.20239 7.71736C3.25259 9.20437 3.46591 13.0317 3.46591 12.994C4.909 12.3666 6.43992 12.0466 8.19044 12.0466C9.79038 12.0466 11.4029 12.4356 12.9526 12.0905C13.1032 12.0466 13.2789 11.9839 13.2726 11.8584Z" fill="white" stroke="black" stroke-width="0.75" stroke-miterlimit="10" stroke-linecap="square"></path><path d="M4.33185 11.4192C4.28166 10.4969 4.13735 7.78011 4.08716 6.43114C4.48871 6.0986 4.95928 5.84763 5.45495 5.69705C5.91297 5.55274 6.42119 5.48372 7.01097 5.48372C7.65722 5.48372 8.32857 5.56529 8.97482 5.64685L9.5395 5.71587C10.0414 5.77234 10.4806 5.80371 10.8822 5.79744C11.93 5.79744 12.7708 5.60293 13.4546 5.21393C13.5425 6.16762 13.6993 9.09143 13.7119 10.8169C13.6993 10.8169 13.6554 10.8357 13.5739 10.8608C13.0468 10.9863 12.4759 11.049 11.8296 11.049C11.0328 11.049 10.2109 10.9549 9.41402 10.8671L8.8807 10.8106C8.53562 10.7729 8.18426 10.7541 7.8329 10.7541C6.59059 10.7416 5.38593 10.9737 4.33185 11.4192Z" fill="white"></path><path d="M13.2663 5.559C13.3479 6.6821 13.4733 9.09142 13.4922 10.6474C12.9902 10.7666 12.4444 10.8231 11.8232 10.8231C11.0389 10.8231 10.2233 10.729 9.43271 10.6412L8.90567 10.5847C8.55431 10.5471 8.19041 10.5282 7.83277 10.5282C6.67203 10.5282 5.54894 10.729 4.53878 11.1055C4.48231 10.0263 4.3631 7.78637 4.31918 6.53779C4.68309 6.25545 5.09719 6.04212 5.53011 5.91036C5.96931 5.77233 6.45871 5.70959 7.02339 5.70959C7.65709 5.70959 8.31589 5.79115 8.95587 5.86644C9.1441 5.89154 9.33232 5.91036 9.52683 5.93546C10.0413 5.99193 10.4868 6.0233 10.8946 6.0233C11.8232 6.01702 12.6075 5.86644 13.2663 5.559ZM13.6239 4.84373C12.8396 5.40842 11.8671 5.57783 10.8883 5.57783C10.4491 5.57783 10.0037 5.54018 9.57075 5.49626C8.73 5.40215 7.86414 5.26411 7.02339 5.26411C6.47126 5.26411 5.93167 5.32058 5.39835 5.48371C4.83994 5.65939 4.31291 5.94801 3.86743 6.33074C3.91763 7.93068 4.13095 11.7454 4.13095 11.7454C5.26659 11.2121 6.55909 10.9612 7.83277 10.9612C8.17786 10.9612 8.51667 10.98 8.85548 11.0176C9.84054 11.1243 10.8381 11.256 11.8232 11.256C12.4255 11.256 13.0279 11.2058 13.6177 11.0615C13.7557 11.0302 13.9314 10.9612 13.9314 10.8231C13.9188 8.8279 13.6929 4.84373 13.6239 4.84373Z" fill="black"></path><path d="M25.2187 10.1016L27.4021 20.0149H23.3113" fill="white"></path><path d="M25.2187 10.1016L27.4021 20.0149H23.3113" stroke="black" stroke-width="1.0647" stroke-miterlimit="10"></path><path d="M25.0682 10.0953L26.0972 20.2722H22.5898" fill="white"></path><path d="M25.0682 10.0953L26.0972 20.2722H22.5898" stroke="black" stroke-width="0.75" stroke-miterlimit="10"></path><path d="M25.087 10.1329L24.7796 20.749H20.9836" fill="white"></path><path d="M25.087 10.1329L24.7796 20.749H20.9836" stroke="black" stroke-width="0.75" stroke-miterlimit="10"></path><path d="M12.1935 10.0514L25.2189 10.1016L23.0982 21L9.57715 20.611L12.1935 10.0514Z" fill="white" stroke="black" stroke-width="1.0647" stroke-miterlimit="10"></path><path d="M14.5398 10.8357C14.4143 10.8357 14.3076 10.478 14.3076 10.0326C14.3076 9.58708 14.408 9.22945 14.5398 9.22945C14.6715 9.22945 14.7719 9.58708 14.7719 10.0326" stroke="black" stroke-width="0.6987" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M16.2966 10.8357C16.1711 10.8357 16.0645 10.478 16.0645 10.0326C16.0645 9.58708 16.1648 9.22945 16.2966 9.22945C16.4284 9.22945 16.5287 9.58708 16.5287 10.0326" stroke="black" stroke-width="0.6987" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M18.0473 10.8357C17.9218 10.8357 17.8152 10.478 17.8152 10.0326C17.8152 9.58708 17.9156 9.22945 18.0473 9.22945C18.1791 9.22945 18.2795 9.58708 18.2795 10.0326" stroke="black" stroke-width="0.6987" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M19.8042 10.8357C19.6787 10.8357 19.572 10.478 19.572 10.0326C19.572 9.58708 19.6724 9.22945 19.8042 9.22945C19.9359 9.22945 20.03 9.58708 20.03 10.0326" stroke="black" stroke-width="0.6987" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M21.5547 10.8357C21.4292 10.8357 21.3225 10.478 21.3225 10.0326C21.3225 9.58708 21.4229 9.22945 21.5547 9.22945C21.6864 9.22945 21.7868 9.58708 21.7868 10.0326" stroke="black" stroke-width="0.6987" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M23.3115 10.8357C23.186 10.8357 23.0793 10.478 23.0793 10.0326C23.0793 9.58708 23.1797 9.22945 23.3115 9.22945C23.4433 9.22945 23.5436 9.58708 23.5436 10.0326" stroke="black" stroke-width="0.6987" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M21.887 19.331L11.4153 19.0675L13.1721 11.7831L23.4242 11.9274L21.887 19.331Z" stroke="black" stroke-width="0.5323" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M21.7428 11.9086L20.168 19.2871" stroke="black" stroke-width="0.5323" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M20.0109 11.8835L18.3984 19.2432" stroke="black" stroke-width="0.5323" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M18.2856 11.8584L16.6355 19.1993" stroke="black" stroke-width="0.5323" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M16.5728 11.8333L14.885 19.1554" stroke="black" stroke-width="0.5323" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M22.2826 17.4237L11.9363 17.1915" stroke="black" stroke-width="0.5323" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M22.6651 15.5728L12.3752 15.372" stroke="black" stroke-width="0.5323" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M23.0477 13.7407L12.8081 13.5713" stroke="black" stroke-width="0.5323" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M14.8663 11.8082L13.1409 19.1114" stroke="black" stroke-width="0.5323" stroke-miterlimit="10" stroke-linecap="round"></path><path d="M7.87272 10.614H8.2263C8.53037 11.6748 9.51331 12.4385 10.6801 12.4385C11.3095 12.4385 11.9176 12.2193 12.3985 11.7525C12.448 11.703 12.4551 11.6111 12.4056 11.5616L11.854 10.9747C11.8115 10.9252 11.7196 10.9252 11.6701 10.9676C11.4155 11.1868 11.0549 11.307 10.7225 11.307C10.1992 11.307 9.76081 11.0313 9.52038 10.614H10.6094C10.6872 10.614 10.7438 10.5575 10.7438 10.4867V10.3595C10.7438 10.2887 10.6872 10.2251 10.6094 10.2251H9.37188C9.34359 10.112 9.32945 9.99174 9.32945 9.87153C9.32945 9.83617 9.32945 9.80788 9.32945 9.77253H10.8923C10.97 9.77253 11.0266 9.71595 11.0266 9.64524V9.51088C11.0266 9.44017 10.97 9.37652 10.8923 9.37652H9.40724C9.59817 8.82495 10.0861 8.4148 10.7155 8.4148C11.062 8.4148 11.4085 8.54209 11.6701 8.77545C11.7196 8.82495 11.7974 8.82495 11.8469 8.77545L12.3985 8.20265C12.4551 8.14608 12.4551 8.06122 12.3914 8.00465C11.9105 7.56622 11.3873 7.347 10.6801 7.347C9.44259 7.347 8.41723 8.2168 8.1768 9.37652H7.87272C7.80201 9.37652 7.74543 9.44017 7.74543 9.51088V9.6311C7.74543 9.70181 7.80201 9.76546 7.87272 9.76546H8.12729C8.12729 9.80788 8.12729 9.85738 8.12729 9.89981C8.12729 10.013 8.12729 10.119 8.14144 10.2251H7.87272C7.80201 10.2251 7.74543 10.2887 7.74543 10.3595V10.4797C7.74543 10.5504 7.80201 10.614 7.87272 10.614Z" fill="black"></path></g></svg>
+                          </div>
+                        {% when 'guarantee' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon" viewBox="0 0 21 25" fill="none"><g opacity="0.7"><path d="M11.8865 18.1159L15.2214 23.4441L16.3713 19.9686L20.0001 20.4542L16.876 15.4646" stroke="black" stroke-miterlimit="10"></path><path d="M8.41089 19.2403L5.77874 23.4441L4.62878 19.9686L1 20.4542L3.70881 16.129" stroke="black" stroke-miterlimit="10"></path><path d="M19.8019 9.06311C19.9041 9.98947 18.703 10.8392 18.5241 11.708C18.3389 12.6024 19.08 13.8674 18.6327 14.6404C18.1791 15.4263 16.7161 15.4135 16.0453 16.0268C15.3809 16.6273 15.2467 18.0903 14.4098 18.4673C13.6048 18.8314 12.4293 17.9626 11.503 18.0648C10.5766 18.167 9.61191 19.2595 8.74305 19.0806C7.84863 18.8953 7.40781 17.4898 6.62839 17.0426C5.84258 16.589 4.41151 16.9084 3.80459 16.2376C3.20405 15.5732 3.66403 14.1805 3.2871 13.3499C2.92295 12.545 1.57493 11.9636 1.47271 11.0372C1.37049 10.1109 2.57157 9.26116 2.75045 8.3923C2.93572 7.49788 2.19464 6.23292 2.64184 5.45989C3.09544 4.67408 4.55845 4.68686 5.22926 4.07355C5.89369 3.47301 6.02785 2.01 6.86477 1.63306C7.66975 1.26891 8.84526 2.13777 9.77163 2.03555C10.698 1.93333 11.6627 0.840866 12.5315 1.01975C13.426 1.20502 13.8668 2.61053 14.6462 3.05774C15.432 3.51134 16.8631 3.1919 17.47 3.86272C18.0705 4.52714 17.6106 5.91988 17.9875 6.75041C18.3516 7.56177 19.6997 8.13675 19.8019 9.06311Z" stroke="black" stroke-miterlimit="10"></path><path d="M16.57 12.4885C17.9189 9.20919 16.3539 5.45724 13.0746 4.10833C9.79522 2.75943 6.04327 4.32437 4.69436 7.60373C3.34546 10.8831 4.9104 14.635 8.18976 15.9839C11.4691 17.3329 15.2211 15.7679 16.57 12.4885Z" stroke="black" stroke-miterlimit="10"></path><path d="M9.5927 5.88792H12.7934V11.2928C12.7934 11.2928 11.5221 12.3724 10.1038 13.746C8.44913 15.3432 6.45586 13.5671 7.86137 12.1616C9.3691 10.6539 9.50965 10.5389 9.50965 10.5389L9.5927 5.88792Z" stroke="black" stroke-width="0.75" stroke-miterlimit="10"></path><path d="M12.7936 9.71477C12.308 9.84254 11.8927 10.2067 11.6883 10.6603C11.4839 11.1203 11.503 11.6697 11.733 12.1169" stroke="black" stroke-width="0.75" stroke-miterlimit="10"></path><path d="M7.68896 12.2766C8.28311 12.9283 8.92198 13.5416 9.59918 14.1102" stroke="black" stroke-width="0.75" stroke-miterlimit="10"></path><path d="M9.62476 7.03151C9.61198 7.03151 9.5992 7.03151 9.58643 7.03151H12.7233" stroke="black" stroke-width="0.75" stroke-miterlimit="10"></path></g></svg>
+                          </div>
+                        {% when 'klarna' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--full-color" viewBox="0 0 26 18" fill="none"><rect width="25.875" height="18" rx="2.5" fill="#FEB4C7"></rect><path fill-rule="evenodd" clip-rule="evenodd" d="M4.0099 11.5347H2.95703V6.75H4.0099V11.5347ZM6.63848 6.75H5.60845C5.60845 7.63051 5.2203 8.43868 4.54356 8.96741L4.13548 9.28615L5.71666 11.5349H7.01669L5.5618 9.46571C6.25144 8.74946 6.63848 7.78586 6.63848 6.75ZM8.31781 11.5333H7.3235V6.75083H8.31781V11.5333ZM11.3219 8.22524V8.43687C11.0536 8.24598 10.7298 8.1338 10.3805 8.1338C9.45616 8.1338 8.70681 8.91535 8.70681 9.87944C8.70681 10.8435 9.45616 11.6251 10.3805 11.6251C10.7298 11.6251 11.0536 11.5129 11.3219 11.3221V11.5335H12.2716V8.22524H11.3219ZM11.319 9.87954C11.319 10.3496 10.9337 10.7307 10.4585 10.7307C9.98325 10.7307 9.59796 10.3496 9.59796 9.87954C9.59796 9.40946 9.98325 9.02845 10.4585 9.02845C10.9337 9.02845 11.319 9.40946 11.319 9.87954ZM21.3409 8.43687V8.22524H22.2906V11.5335H21.3409V11.3221C21.0726 11.5129 20.7488 11.6251 20.3995 11.6251C19.4751 11.6251 18.7258 10.8435 18.7258 9.87944C18.7258 8.91535 19.4751 8.1338 20.3995 8.1338C20.7488 8.1338 21.0726 8.24598 21.3409 8.43687ZM20.4775 10.7307C20.9527 10.7307 21.338 10.3496 21.338 9.87954C21.338 9.40946 20.9527 9.02845 20.4775 9.02845C20.0022 9.02845 19.617 9.40946 19.617 9.87954C19.617 10.3496 20.0022 10.7307 20.4775 10.7307ZM17.0382 8.13634C16.6588 8.13634 16.2998 8.25918 16.0598 8.59808V8.22551H15.1142V11.5336H16.0714V9.79507C16.0714 9.29199 16.3948 9.04564 16.7843 9.04564C17.2017 9.04564 17.4416 9.30569 17.4416 9.78822V11.5336H18.3902V9.42978C18.3902 8.65991 17.8033 8.13634 17.0382 8.13634ZM13.7407 8.2252V8.65607C13.9311 8.39762 14.2858 8.22539 14.6715 8.22539V9.18804L14.6662 9.18782L14.6602 9.1876C14.2844 9.1876 13.7429 9.46771 13.7429 9.98882V11.5334H12.7684V8.2252H13.7407ZM22.7028 10.9814C22.7028 10.6381 22.9696 10.3599 23.2987 10.3599C23.6278 10.3599 23.8947 10.6381 23.8947 10.9814C23.8947 11.3247 23.6278 11.603 23.2987 11.603C22.9696 11.603 22.7028 11.3247 22.7028 10.9814Z" fill="#17120F"></path></svg>
+                          </div>
+                        {% when 'paypal' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--full-color" viewBox="0 0 24 32" preserveAspectRatio="xMinYMin meet"><path fill="#009cde" opacity="1" d="M 20.924 7.157 C 21.204 5.057 20.924 3.657 19.801 2.357 C 18.583 0.957 16.43 0.257 13.716 0.257 L 5.758 0.257 C 5.29 0.257 4.729 0.757 4.634 1.257 L 1.358 23.457 C 1.358 23.857 1.639 24.357 2.107 24.357 L 6.975 24.357 L 6.694 26.557 C 6.6 26.957 6.881 27.257 7.255 27.257 L 11.375 27.257 C 11.844 27.257 12.311 26.957 12.405 26.457 L 12.405 26.157 L 13.247 20.957 L 13.247 20.757 C 13.341 20.257 13.809 19.857 14.277 19.857 L 14.84 19.857 C 18.864 19.857 21.954 18.157 22.89 13.157 C 23.358 11.057 23.172 9.357 22.048 8.157 C 21.767 7.757 21.298 7.457 20.924 7.157 L 20.924 7.157"></path><path fill="#012169" opacity="1" d="M 20.924 7.157 C 21.204 5.057 20.924 3.657 19.801 2.357 C 18.583 0.957 16.43 0.257 13.716 0.257 L 5.758 0.257 C 5.29 0.257 4.729 0.757 4.634 1.257 L 1.358 23.457 C 1.358 23.857 1.639 24.357 2.107 24.357 L 6.975 24.357 L 8.286 16.057 L 8.192 16.357 C 8.286 15.757 8.754 15.357 9.315 15.357 L 11.655 15.357 C 16.243 15.357 19.801 13.357 20.924 7.757 C 20.831 7.457 20.924 7.357 20.924 7.157"></path><path fill="#003087" opacity="1" d="M 9.504 7.157 C 9.596 6.857 9.784 6.557 10.065 6.357 C 10.251 6.357 10.345 6.257 10.532 6.257 L 16.711 6.257 C 17.461 6.257 18.208 6.357 18.772 6.457 C 18.958 6.457 19.146 6.457 19.333 6.557 C 19.52 6.657 19.707 6.657 19.801 6.757 C 19.894 6.757 19.987 6.757 20.082 6.757 C 20.362 6.857 20.643 7.057 20.924 7.157 C 21.204 5.057 20.924 3.657 19.801 2.257 C 18.677 0.857 16.525 0.257 13.809 0.257 L 5.758 0.257 C 5.29 0.257 4.729 0.657 4.634 1.257 L 1.358 23.457 C 1.358 23.857 1.639 24.357 2.107 24.357 L 6.975 24.357 L 8.286 16.057 L 9.504 7.157 Z"></path></svg>
+                          </div>
+                        {% comment %} mik added icon thumbs up {% endcomment %}
+                        {% when 'checkmark' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-circle-checkmark" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M52.68 24.48A22 22 0 1 1 47 15.93M21 32l8.5 8.5L57 13"/></svg>
+                          </div>
+                        {% when 'gift' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-gift" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M9 20.23h46v8.68H9zM13.34 28.91h36.89v24.3H13.34zM27.82 20.66v32.98M35.91 20.88v32.98M20.52 11.43a3.73 3.73 0 0 0-.74 2.87 4.57 4.57 0 0 0 .8 2.27C22 18.09 25.15 20 32 20.23a12 12 0 0 0-2.43-7 7.52 7.52 0 0 0-5.66-3.12 4 4 0 0 0-3.39 1.32z"/><path class="a" d="M43.37 11.43a3.73 3.73 0 0 1 .74 2.87 4.48 4.48 0 0 1-.8 2.27c-1.42 1.52-4.57 3.41-11.42 3.66a12.08 12.08 0 0 1 2.43-7A7.56 7.56 0 0 1 40 10.14a4 4 0 0 1 3.37 1.29z"/></svg>
+                          </div>
+                        {% when 'globe' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-globe" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><circle class="a" cx="32" cy="32" r="22"/><path class="a" d="M13 21h38M10 32h44M13 43h38M32 10c-12 8-12 37 0 44M32 10c12 8 12 37 0 44"/></svg>
+                          </div>
+                        {% when 'heart' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-heart" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M51.27 15.05a13 13 0 0 0-18.44 0l-.83.83-.83-.83a13 13 0 0 0-18.44 18.44l.83.83L32 52.77l18.44-18.45.83-.83a13 13 0 0 0 0-18.44z"/></svg>
+                          </div>
+                        {% when 'leaf' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-leaf" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:2px}</style></defs><path class="a" d="M52 11L13 50M35 13v15h16"/><path class="a" d="M52 11c6 24-16.72 47.29-33 32C7 22 29 10 52 11z"/></svg>
+                          </div>
+                        {% when 'lock' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-lock" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M19.45 23.6v-3.2c0-7 5.89-11.75 12.55-11.75 7.21 0 12.55 5.49 12.55 11.75v3.2M10 23.6h44v31.75H10zM32 37.47v7.47"/><circle class="a" cx="32" cy="35.87" r="1.6"/></svg>
+                          </div>
+                        {% when 'package' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-package" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M32 54.52L10 41.95v-19.9L32 9.48l22 12.57v19.9L32 54.52z"/><path class="a" d="M32 54.52v-19.9l22-12.57M32 34.62L10 22.05M41.7 15.02L21 28.33v8.38"/></svg>
+                          </div>
+                        {% when 'phone' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-phone" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M18.4 9.65l10.2 10.2-6.32 6.32c2.1 7 6.89 12.46 15.55 15.55l6.32-6.32 10.2 10.2-8.75 8.75C25.71 50.3 13.83 38.21 9.65 18.4z"/></svg>
+                          </div>
+                        {% when 'ribbon' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-ribbon" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M28.57 42.31l-8.36 13.07-2.6-7.17-7.61.65 8.35-13.07a17.05 17.05 0 0 0 8.12 5.94 17.3 17.3 0 0 0 1.74.5zM54 48.86l-7.61-.65-2.61 7.17-8.36-13.07.37-.08a16.4 16.4 0 0 0 1.73-.5 17 17 0 0 0 8.12-5.93z"/><path class="a" d="M49 25.64a16.79 16.79 0 0 1-3.14 9.85 3.55 3.55 0 0 1-.23.31 17 17 0 0 1-8.12 5.93 16.4 16.4 0 0 1-1.73.5l-.37.08a16.74 16.74 0 0 1-3.42.35 16.91 16.91 0 0 1-3.43-.35l-.36-.08a17.3 17.3 0 0 1-1.74-.5 17.05 17.05 0 0 1-8.12-5.94c-.07-.09-.15-.19-.22-.3A16.86 16.86 0 0 1 15 25.64a17 17 0 0 1 34 0z"/><path class="a" d="M36.09 27.78l.96 5.63L32 30.75l-5.05 2.66.96-5.63-4.09-3.98 5.65-.82L32 17.86l2.53 5.12 5.64.82-4.08 3.98z"/></svg>
+                          </div>
+                        {% when 'shield' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-shield" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M21.18 31.69L28.54 39l15.91-15.88"/><path class="a" d="M53 12.54v15.24a31.41 31.41 0 0 1-3.7 14.95A25.46 25.46 0 0 1 32 56a25.46 25.46 0 0 1-17.3-13.27A31.41 31.41 0 0 1 11 27.78V12.54C24.88 13.67 32 8 32 8s7.12 5.67 21 4.54z"/></svg>
+                          </div>
+                        {% when 'tag' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-tag" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M46.69 10.34l-10.55.07-25.8 25.8 17.45 17.45 25.8-25.8.07-10.55-6.97-6.97z"/><circle class="a" cx="43.95" cy="20.05" r="3.53"/><path class="a" d="M14.4 32.15L31.85 49.6"/></svg>
+                          </div>
+                        {% when 'truck' %} 
+                          <div class="icon-and-text__icon">
+                            <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-truck" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:2px}</style></defs><path class="a" d="M16.5 43.22H6.88V16.5h33.14v26.72H23.94M45.42 43.22h-5.4V30.4h17.1v12.82h-4.23M57.12 30.4l-6.41-8.56H40.02"/><circle class="a" cx="20.24" cy="43.76" r="3.74"/><path class="a" d="M45.42 43.23a3.82 3.82 0 1 1 0 .37v-.37"/></svg>
+                          </div>
+                      {% endcase %}
+                      <span class="icon-and-text__text">{{ block.settings.text }}</span>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            {%- endunless -%}
+          {% comment %} mik added {% endcomment %}
+          {%- when 'vendor' -%}
+            {%- if product != blank -%}
+              {%- render 'vendor' with product.vendor, class: 'h6 link-faded' -%}
+            {%- else -%}
+              {%- assign placeholder_vendor = 'general.on_boarding.product_vendor' | t -%}
+              {%- render 'vendor' with placeholder_vendor, class: 'h6 link-faded' -%}
+            {%- endif -%}
+
+          {%- when 'title' -%}
+            {%- if product != blank -%}
+              {%- assign product_title = product.title -%}
+            {%- else -%}
+              {%- assign product_title = 'general.on_boarding.product_title' | t -%}
+            {%- endif -%}
+
+            {%- if request.page_type == 'product' and update_url -%}
+              <h1 class="product-title {{ block.settings.heading_tag }}">
+                {{- product_title -}}
+              </h1>
+            {%- else -%}
+              <h2 class="product-title {{ block.settings.heading_tag }}">
+                <a href="{{ product.url }}">{{ product_title }}</a>
+              </h2>
+            {%- endif -%}
+
+          {%- when 'sku' -%}
+            <variant-sku class="variant-sku text-sm text-subdued" form="{{ product_form_id }}" {% if product != blank and product.selected_or_first_available_variant.sku == blank %}hidden{% endif %}>
+              {{- 'product.general.sku' | t }} {% if product != blank -%}{{ product.selected_or_first_available_variant.sku -}}{%- else -%}SK-123AB{%- endif -%}
+            </variant-sku>
+
+          {%- when 'badges' -%}
+            {%- if product != blank -%}
+              {%- render 'product-badges', product: product, variant: product.selected_or_first_available_variant, types: 'custom,discount', form_id: product_form_id -%}
+            {%- endif -%}
+
+          {%- when 'price' -%}
+            <div class="v-stack">
+              {%- render 'price-list', product: product, variant: product.selected_or_first_available_variant, context: 'product', form_id: product_form_id -%}
+
+              {%- if block.settings.show_taxes_notice -%}
+                <p class="text-sm text-subdued">
+                  {%- if cart.taxes_included -%}
+                    {{ 'product.general.taxes_included' | t }}
+                  {%- else -%}
+                    {{ 'product.general.taxes_excluded' | t }}
+                  {%- endif -%}
+
+                  {%- if shop.shipping_policy.body != blank -%}
+                    {{ 'product.general.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                  {%- endif -%}
+                </p>
+              {%- endif -%}
+            </div>
+
+          {%- when 'payment_terms' -%}
+            {%- if product != blank -%}
+              <payment-terms class="payment-terms" form="{{ product_form_id }}">
+                {%- capture product_installment_form_id -%}product-installment-form-{{ section.id }}-{{ product.id }}{%- endcapture -%}
+
+                {%- form 'product', product, id: product_installment_form_id -%}
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  {{- form | payment_terms -}}
+                {%- endform -%}
+              </payment-terms>
+            {%- endif -%}
+
+          {%- when 'rating' -%}
+            {%- if product != blank -%}
+              {%- render 'product-rating', product: product, show_empty: block.settings.show_empty, show_placeholder: false -%}
+            {%- else -%}
+              {%- render 'product-rating', show_placeholder: true -%}
+            {%- endif -%}
+
+          {%- when 'separator' -%}
+            <hr>
+
+          {%- when 'description' -%}
+            {%- if product == blank -%}
+              {%- assign product_description = 'general.on_boarding.product_description' | t -%}
+            {%- else -%}
+              {%- assign product_description = product.description -%}
+            {%- endif -%}
+
+            {%- if product_description != blank -%}
+              {%- if block.settings.collapse_content -%}
+                {%- assign accordion_title = 'product.general.description' | t -%}
+                {%- render 'accordion', title: accordion_title, content: product_description, prose_content: true, block: block -%}
+              {%- else -%}
+                <div class="prose">
+                  {{- product_description -}}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+
+          {%- when 'variant_picker' -%}
+            {%- if product != blank -%}
+              {%- render 'variant-picker',
+                  product: product,
+                  form_id: product_form_id,
+                  update_url: update_url,
+                  hide_sold_out_variants: block.settings.hide_sold_out_variants,
+                  selector_type: block.settings.selector_type,
+                  color_selector_type: block.settings.color_selector_type,
+                  size_chart_page: block.settings.size_chart_page -%}
+            {%- endif -%}
+
+          {%- when 'product_variations' -%}
+            {%- liquid
+              assign contains_product = false
+
+              for product_variation in block.settings.products
+                if product_variation == product
+                  assign contains_product = true
+                endif
+              endfor
+            -%}
+
+            {%- if contains_product -%}
+              {%- comment -%}
+                IMPLEMENTATION NOTE: this feature allows to connect different products on the same page. It is therefore
+                visually similar to a variant picker, although it does not share the functionality
+              {%- endcomment -%}
+
+              <div class="variant-picker v-stack gap-4">
+                <div class="variant-picker__option v-stack gap-2">
+                  {%- assign metafield_parts = block.settings.option_value_metafield | split: '.' -%}
+                  {%- assign metafield_namespace = metafield_parts | first -%}
+                  {%- assign metafield_key = metafield_parts | last -%}
+
+                  {%- if block.settings.option_name != blank -%}
+                    <div class="h-stack gap-1">
+                      <p class="text-subdued">{{ block.settings.option_name | escape }}:</p>
+                      <span>{{ product.metafields[metafield_namespace][metafield_key].value | escape }}</span>
+                    </div>
+                  {%- endif -%}
+
+                  <div class="variant-picker__option-values h-stack gap-2.5 wrap">
+                    {%- liquid
+                      for product_variation in block.settings.products
+                        assign value = product_variation.metafields[metafield_namespace][metafield_key].value
+
+                        if product_variation == product
+                          assign selected = true
+                        else
+                          assign selected = false
+                        endif
+
+                        case block.settings.color_selector_type
+                          when 'color'
+                            render 'swatch' with 'color', href: product_variation.url, value: value, selected: selected
+
+                          when 'variant'
+                            render 'swatch' with 'media', href: product_variation.url, value: value, media: product_variation.featured_media, selected: selected
+
+                          when 'block'
+                            render 'swatch' with 'block', href: product_variation.url, value: value, selected: selected
+
+                          when 'block_swatch'
+                            render 'swatch' with 'block', href: product_variation.url, value: value, selected: selected, show_color: true
+                        endcase
+                      endfor
+                    -%}
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+
+          {%- when 'line_item_property' -%}
+            {%- if block.settings.label != blank -%}
+              {%- capture name -%}properties[{{ block.settings.label | escape }}]{%- endcapture -%}
+
+              <div class="line-item-property">
+                {%- liquid
+                  if block.settings.type == 'text'
+                    if block.settings.allow_long_text
+                      render 'input', label: block.settings.label, name: name, form: product_form_id, multiline: 4, required: block.settings.required, maxlength: block.settings.max_length
+                    else
+                      render 'input', type: 'text', label: block.settings.label, name: name, form: product_form_id, required: block.settings.required, maxlength: block.settings.max_length
+                    endif
+                  elsif block.settings.type == 'checkbox'
+                    render 'checkbox', label: block.settings.label, name: name, form: product_form_id, value: block.settings.checkbox_value, required: block.settings.required
+                  elsif block.settings.type == 'dropdown' and block.settings.select_values != blank
+                    assign option_values = block.settings.select_values | split: ','
+                    render 'select', label: block.settings.label, option_values: option_values, show_empty_value: true, name: name, form: product_form_id, required: block.settings.required
+                  endif
+                -%}
+              </div>
+            {%- endif -%}
+
+          {%- when 'quantity_selector' -%}
+            {%- if product.available -%}
+              {% render 'quantity-selector', variant: product.selected_or_first_available_variant, form: product_form_id %}
+            {%- endif -%}
+
+          {%- when 'inventory' -%}
+            {%- render 'inventory',
+                product: product,
+                show_in_stock_quantity: block.settings.show_in_stock_quantity,
+                show_progress_bar: block.settings.show_progress_bar,
+                progress_bar_max_value: block.settings.progress_bar_max_value,
+                low_threshold: block.settings.low_inventory_threshold,
+                form_id: product_form_id
+            -%}
+
+          {%- when 'buy_buttons' -%}
+            {%- render 'buy-buttons',
+                product: product,
+                form_id: product_form_id,
+                hide_branded_buy_buttons: block.settings.hide_branded_buy_buttons,
+                show_payment_button: block.settings.show_payment_button,
+                show_gift_card_recipient: block.settings.show_gift_card_recipient,
+                atc_button_background: block.settings.atc_button_background,
+                atc_button_text_color: block.settings.atc_button_text_color,
+                payment_button_background: block.settings.payment_button_background,
+                payment_button_text_color: block.settings.payment_button_text_color
+            -%}
+
+          {%- when 'pickup_availability' -%}
+            {%- if product != blank -%}
+              {%- render 'pickup-availability', product_variant: product.selected_or_first_available_variant, form_id: product_form_id -%}
+            {%- endif -%}
+
+          {%- when 'offers' -%}
+            {%- assign offers_count = 0 -%}
+
+            {%- capture offers_content -%}
+              {%- for i in (1..3) -%}
+                {%- assign title_setting = 'offer_' | append: i | append: '_title' -%}
+                {%- assign content_setting = 'offer_' | append: i | append: '_content' -%}
+
+                {%- if block.settings[title_setting] != blank or block.settings[content_setting] != blank -%}
+                  <div class="product-offers__item {% unless block.settings.stack_offers %}text-center{% endunless %} snap-center">
+                    <div class="v-stack gap-2.5">
+                      {%- if block.settings[title_setting] != blank -%}
+                        <p class="h6">{{ block.settings[title_setting] }}</p>
+                      {%- endif -%}
+
+                      {%- if block.settings[content_setting] != blank -%}
+                        <div class="prose">
+                          {{- block.settings[content_setting] -}}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+
+                  {%- assign offers_count = offers_count | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+
+            {%- if offers_content != blank -%}
+              {%- assign carousel_id = 'product-offers-' | append: block.id -%}
+
+              <div class="product-offers border" style="{% render 'surface', background: block.settings.background, text_color: block.settings.text_color, border_color: block.settings.border_color %}">
+                <scroll-carousel id="{{ carousel_id }}" class="product-offers__list {% if block.settings.stack_offers or offers_count == 1 %}product-offers__list--stack divide-y{% else %}product-offers__list--carousel scroll-area snap-x{% endif %}">
+                  {{ offers_content }}
+                </scroll-carousel>
+
+                {%- if block.settings.stack_offers == false and offers_count > 1 -%}
+                  <carousel-navigation aria-controls="{{ carousel_id }}" class="page-dots">
+                    {%- for i in (1..offers_count) -%}
+                      <button class="tap-area" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
+                        <span class="sr-only">{{ 'general.accessibility.go_to_item' | t: index: forloop.index }}</span>
+                      </button>
+                    {%- endfor -%}
+                  </carousel-navigation>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+          {%- when 'complementary_products' -%}
+            {%- unless block.settings.show_below_gallery -%}
+              {%- render 'complementary-products', product: product, block: block -%}
+            {%- endunless -%}
+
+          {%- when 'text' -%}
+            {%- if block.settings.text != blank -%}
+              <div class="prose">
+                {{- block.settings.text -}}
+              </div>
+            {%- endif -%}
+
+          {%- when 'accordion' -%}
+            {%- liquid
+              assign accordion_title = block.settings.title | default: block.settings.page.title
+              assign accordion_content = block.settings.page.content | default: block.settings.content
+
+              if accordion_title != blank and accordion_content != blank
+                render 'accordion', title: accordion_title, content: accordion_content, prose_content: true, icon: block.settings.icon, custom_icon: block.settings.custom_icon, block: block
+              endif
+            -%}
+
+          {%- when 'feature_with_icon' -%}
+            {%- if block.settings.text != blank or block.settings.icon != 'none' or block.settings.custom_icon != blank -%}
+              {%- capture feature_content -%}
+                {%- if block.settings.custom_icon != blank -%}
+                  {%- capture sizes -%}{{ block.settings.icon_width }}px{%- endcapture -%}
+                  {%- capture widths -%}{{ block.settings.icon_width }}, {{ block.settings.icon_width | times: 2 | at_most: block.settings.custom_icon.width }}{%- endcapture -%}
+                  {%- capture style -%}--image-max-width: {{ block.settings.icon_width }}px{%- endcapture -%}
+                  {{- block.settings.custom_icon | image_url: width: block.settings.custom_icon.width | image_tag: loading: 'lazy', sizes: sizes, widths: widths, class: 'constrained-image', style: style -}}
+                {%- else -%}
+                  {%- render 'icon' with block.settings.icon, width: block.settings.icon_width -%}
+                {%- endif -%}
+
+                {%- if block.settings.text != blank -%}
+                  <p>{{ block.settings.text }}</p>
+                {%- endif -%}
+              {%- endcapture -%}
+
+              {%- assign has_border = false -%}
+
+              {%- if block.settings.border_color != blank and block.settings.border_color != 'rgba(0,0,0,0)' -%}
+                {%- assign has_border = true -%}
+              {%- endif -%}
+
+              {%- if block.settings.link -%}
+                <a href="{{ block.settings.link }}" class="feature-badge {% if has_border %}border{% endif %}" style="{% render 'surface', background: block.settings.background, text_color: block.settings.text_color, border_color: block.settings.border_color %}">
+                  {{- feature_content -}}
+                </a>
+              {%- else -%}
+                <div class="feature-badge {% if has_border %}border{% endif %}" style="{% render 'surface', background: block.settings.background, text_color: block.settings.text_color, border_color: block.settings.border_color %}">
+                  {{- feature_content -}}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+
+          {%- when 'liquid' -%}
+            {%- if block.settings.liquid != blank -%}
+              <div class="liquid">
+                {{- block.settings.liquid -}}
+              </div>
+            {%- endif -%}
+
+          {%- when 'modal' -%}
+            {%- if block.settings.button_title != blank and block.settings.modal_content != blank -%}
+              {%- assign modal_id = 'modal-' | append: block.id -%}
+
+              {%- render 'button', content: block.settings.button_title, aria_controls: modal_id, style: block.settings.button_style, stretch: block.settings.stretch_button, background: block.settings.button_background, text_color: block.settings.button_text_color -%}
+
+              <x-modal id="{{ modal_id | escape }}" class="modal modal--lg">
+                <span class="h5" slot="header">{{ block.settings.modal_title }}</span>
+
+                <div class="prose">
+                  {{- block.settings.modal_content -}}
+                </div>
+              </x-modal>
+            {%- endif -%}
+
+          {%- when 'image' -%}
+            {%- if block.settings.image != blank -%}
+              {%- capture image_style_attribute -%}{% if block.settings.alignment == 'center' %}margin-inline: auto;{% elsif block.settings.alignment == 'end' %}margin-inline-start: auto;{% endif %}{%- endcapture -%}
+
+              {%- if block.settings.width_mode == 'custom' -%}
+                {%- capture image_style_attribute -%}{{ image_style_attribute }} --image-max-width: {{ block.settings.max_width }}px; --image-mobile-max-width: {{ block.settings.mobile_max_width }}px{%- endcapture -%}
+                {%- capture image_sizes_attribute -%}(max-width: 699px) min({{ block.settings.mobile_max_width }}px, 100vw), min({{ block.settings.max_width }}px, 100vw){%- endcapture -%}
+              {%- else -%}
+                {%- capture image_sizes_attribute -%}min(600px, 100vw){%- endcapture -%}
+                {%- capture image_style_attribute -%}width: 100%;{%- endcapture -%}
+              {%- endif -%}
+
+              {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy', sizes: image_sizes_attribute, widths: '200,300,400,500,600,800,1000,1200,1400', class: 'constrained-image', style: image_style_attribute -}}
+            {%- endif -%}
+
+          {%- when 'button' -%}
+            {%- if block.settings.text != blank -%}
+              {%- render 'button', href: block.settings.link, content: block.settings.text, stretch: block.settings.stretch, background: block.settings.background, text_color: block.settings.text_color -%}
+            {%- endif -%}
+
+          {%- when 'share_buttons' -%}
+            <button class="share-buttons share-buttons--native link-faded" is="share-button" hidden>
+              <span class="smallcaps text-xxs">{{- 'general.social.share' | t -}}</span>
+              {%- render 'icon' with 'share' -%}
+            </button>
+
+            <div class="share-buttons">
+              <span class="smallcaps text-xxs text-subdued">{{- 'general.social.share' | t -}}</span>
+              {%- render 'share-buttons', url: product.url, title: product.title, description: product.description, layout: 'list' -%}
+            </div>
+
+          {%- when 'more_information' -%}
+            {%- comment -%}We need at least one block compatible with below gallery information{%- endcomment -%}
+            {%- if block.settings.text != blank and has_content_below_gallery -%}
+              <a href="#product-extra-information" class="product-info__more-info md-max:hidden">
+                <span class="smallcaps text-xxs">{{- block.settings.text -}}</span>
+                {%- render 'icon' with 'chevron-right' -%}
+              </a>
+            {%- endif -%}
+        {%- endcase -%}
+      {%- endcapture -%}
+
+      {%- if block_content != blank -%}
+        {%- if allow_block_group and inside_block_group_context == false -%}
+          {%- assign inside_block_group_context = true -%}
+          <div class="product-info__block-group {{ block_group_class }}" data-group-type="{{ block_group_name }}">
+        {%- endif -%}
+
+        <div class="product-info__block-item" data-block-type="{{ block.type | replace: '_', '-' }}" {% unless block.type == '@app' or block.type == 'accordion' %}{{ block.shopify_attributes }}{% endunless %}>
+          {{- block_content -}}
+        </div>
+      {%- endif -%}
+
+      {%- if inside_block_group_context and allow_block_group == false -%}
+        {%- assign inside_block_group_context = false -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%}
+    IMPLEMENTATION NOTE: under rare circumstances, merchant may want to show selectors to allow variant selection, but hide
+    the add to cart button. This is however problematic as product info is changed based on the form, so we create a default
+    one if no buy buttons exists
+  {%- endcomment -%}
+
+  {%- assign buy_buttons_block = section.blocks | where: 'type', 'buy_buttons' | first -%}
+
+  {%- unless buy_buttons_block != blank or product == blank -%}
+    {%- form 'product', product, id: product_form_id, hidden: true -%}
+      <input type="hidden" disabled name="id" value="{{ product.selected_or_first_available_variant.id }}">
+    {%- endform -%}
+  {%- endunless -%}
+</safe-sticky>

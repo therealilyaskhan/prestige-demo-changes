@@ -371,7 +371,7 @@
                           const doc = parser.parseFromString(data, 'text/html');
                           const productCards = doc.querySelectorAll('product-list .product-card');
 
-                          const productsContainer = document.getElementById('product-list.product-list');
+                          const productsContainer = document.getElementById('product-list-{{ section.id }}');
                           productCards.forEach((productCard) => {
                             productsContainer.appendChild(productCard);
                           });

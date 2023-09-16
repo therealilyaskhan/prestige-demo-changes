@@ -76,7 +76,7 @@
         "collection-1": {
           "type": "collection",
           "settings": {
-            "collection": "guilty",
+            "collection": "frontpage",
             "products_count": 8,
             "title": "",
             "link_url": "",

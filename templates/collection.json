@@ -21,8 +21,10 @@
     "main": {
       "type": "main-collection",
       "settings": {
+        "show_variants_as_products": true,
+        "autoload_enabled": true,
         "hide_product_information": false,
-        "products_per_page": 13,
+        "products_per_page": 8,
         "products_per_row_mobile": "2",
         "products_size_desktop": "medium",
         "show_grid_mode_selector": false,

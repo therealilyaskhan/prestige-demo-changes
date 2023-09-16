@@ -339,6 +339,13 @@
                         stacked: true
                       -%}
                     {%- endfor -%}
+                  {% else %}
+                    {%- render 'product-card',
+                      product: variant,
+                      reveal: settings.stagger_products_apparition,
+                      hide_product_information: section.settings.hide_product_information,
+                      stacked: true
+                    -%}
                   {% endif %}
                   {% comment %} mik rendered all the variants of a products as seaprate product cards {% endcomment %}
                 {%- endfor -%}

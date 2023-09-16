@@ -163,40 +163,13 @@
       {%- for color_label in color_label_list -%}
         {%- if product.options_by_name[color_label] != blank -%}
           {%- assign product_option = product.options_by_name[color_label] -%}
-          {%- capture name -%}swatch-{{ section.id }}-{{ product.id }}-{{ product_option.position }}{%- endcapture -%}
-
-          {%- if product_option.values.size > 1 -%}
-            {%- case settings.product_color_display -%}
-              {%- when 'count' -%}
-                <p class="smallcaps text-subdued">
-                  {{- 'product.general.available_colors_count' | t: count: product_option.values.size -}}
-                </p>
-
-              {%- when 'swatch' -%}
-                <fieldset
-                  class="h-stack wrap justify-center gap-1"
-                  data-option-position="{{ product_option.position }}"
-                >
-                  {%- for option_value in product_option.values -%}
-                    {%- if forloop.first
-                      or product.selected_or_first_available_variant.matched
-                      and option_value == product_option.selected_value
-                    -%}
-                      {%- assign selected = true -%}
-                    {%- else -%}
-                      {% assign selected = false %}
-                    {%- endif -%}
-
-                    {%- render 'swatch' with 'color',
-                      value: option_value,
-                      name: name,
-                      selected: selected,
-                      size: 'sm'
-                    -%}
-                  {%- endfor -%}
-                </fieldset>
-            {%- endcase -%}
-          {%- endif -%}
+          {%- capture name -%}swatch-{{ section.id }}-{{ variant.id }}-{{ product_option.position }}{%- endcapture -%}
+          <fieldset
+            class="h-stack wrap justify-center gap-1"
+            data-option-position="{{ product_option.position }}"
+          >
+            {%- render 'swatch' with 'color', value: variant.options[product_option.position], name: name, selected: true, size: 'sm' -%}
+          </fieldset>
 
           {%- break -%}
         {%- endif -%}

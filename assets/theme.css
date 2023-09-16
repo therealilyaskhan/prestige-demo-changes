@@ -7858,4 +7858,8 @@ ul {
     margin-right: calc(-1 * max(var(--container-gutter), 50% - var(--container-max-width) / 2));
   } 
 }
+.button-disabled {
+  cursor: default;
+  opacity: 0.5;
+}
 /* mik css */

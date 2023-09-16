@@ -353,6 +353,9 @@
               </product-list>
 
               {% if section.settings.autoload_enabled %}
+                <div id="load-more-{{ section.id }}">
+                  {%- render 'button', type: 'button', content: 'Load more' -%}
+                </div>
                 {% comment %} mik added auto load script {% endcomment %}
                 <script>
                   document.addEventListener('DOMContentLoaded', function () {
@@ -385,6 +388,9 @@
 
                           if (currentPage == totalPages) {
                             loading = true;
+                            document
+                              .querySelector('#load-more-{{ section.id }} button')
+                              .classList.add('button-disabled');
                           } else {
                             loading = false;
                           }
@@ -396,7 +402,7 @@
                     }
 
                     // Detect when the user scrolls to the bottom of the page
-                    window.addEventListener('scroll', function () {
+                    document.querySelector('#load-more-{{ section.id }} button').addEventListener('click', function () {
                       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
                         loadMoreProducts();
                       }

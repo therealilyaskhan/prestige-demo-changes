@@ -402,11 +402,9 @@
                     }
 
                     // Detect when the user scrolls to the bottom of the page
-                    document.querySelector('#load-more-{{ section.id }} button').addEventListener('click', function () {
-                      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-                        loadMoreProducts();
-                      }
-                    });
+                    document
+                      .querySelector('#load-more-{{ section.id }} button')
+                      .addEventListener('click', loadMoreProducts);
                   });
                 </script>
                 {% comment %} mik added auto load script {% endcomment %}

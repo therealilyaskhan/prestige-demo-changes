@@ -353,6 +353,7 @@
               </product-list>
 
               {% if section.settings.autoload_enabled %}
+                {% comment %} mik added auto load script {% endcomment %}
                 <script>
                   document.addEventListener('DOMContentLoaded', function () {
                     let loading = false;
@@ -402,6 +403,7 @@
                     });
                   });
                 </script>
+                {% comment %} mik added auto load script {% endcomment %}
               {% else %}
                 {%- render 'pagination', paginate: paginate, facet: true -%}
               {% endif %}
